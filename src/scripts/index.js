@@ -1,6 +1,6 @@
 import React from 'react';
-import { Store } from './Stores/';
+import App from './Containers/App';
 
-import Dashboard from './Components/Dashboard.js';
+React.render(<App />, document.getElementById('Dashboard'));
 
-React.render(<Dashboard />, document.getElementById('Dashboard'));
+

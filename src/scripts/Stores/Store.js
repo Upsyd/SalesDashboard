@@ -1,22 +1,18 @@
 import Reflux from 'reflux';
-import Actions from '../Actions/Actions.js';
+import { EXAMPLE } from '../Constants/ActionTypes';
 
-var Store = Reflux.createStore({
 
-  listenables: [Actions],
+let initialState = {
+};
 
-  data: {
-    result: []
-  },
+export default function store(state = initialState, action) {
+  let newState = {...state};
 
-  // ev(index) {
-    // this.data.projects.splice(index, 1);
-    // this.trigger(this.data);
-  // },
+  switch (action.type) {
+    case EXAMPLE:
+      return newState;
 
-  getInitialState() {
-    return this.data;
+    default:
+      return state;
   }
-});
-
-export default Store;
+}

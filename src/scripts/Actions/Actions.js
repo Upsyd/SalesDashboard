@@ -1,10 +1,7 @@
-import Reflux from 'reflux';
+import { EXAMPLE } from '../Constants/ActionTypes';
 
-const Actions = Reflux.createActions({
-
-  // Example
-  'Example': {}
-
-});
-
-export default Actions;
+export function example() {
+  return {
+    type: EXAMPLE
+  };
+}
