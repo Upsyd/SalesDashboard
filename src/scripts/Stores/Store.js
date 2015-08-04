@@ -1,4 +1,3 @@
-import Reflux from 'reflux';
 import { EXAMPLE } from '../Constants/ActionTypes';
 
 

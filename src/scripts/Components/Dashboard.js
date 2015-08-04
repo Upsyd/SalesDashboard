@@ -1,6 +1,4 @@
 import React, { Component } from 'react';
-import Reflux from 'reflux';
-import reactMixin from 'react-mixin';
 
 // Vendor styles
 import 'bootstrap-webpack';
