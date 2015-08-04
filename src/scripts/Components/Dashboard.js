@@ -2,8 +2,6 @@ import React, { Component } from 'react';
 import Reflux from 'reflux';
 import reactMixin from 'react-mixin';
 
-import { Store } from '../Stores/';
-
 // Vendor styles
 import 'bootstrap-webpack';
 
@@ -16,7 +14,6 @@ import Header from './Header.js';
 import LeftSide from './LeftSide.js';
 import RightSide from './RightSide.js';
 
-// @reactMixin.decorate(Reflux.connect(Store))
 export default class ApplicationMenu extends Component {
   render() {
     return (
