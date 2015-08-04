@@ -16,7 +16,7 @@ export default class performanceWidget {
           .style('opacity', 1);
 
         let selectionWidth = parseInt(sel.style('width'), 10), //selection[0][0].clientWidth,
-          selectionHeight = parseInt(sel.style('height'), 10); //selection[0][0].clientHeight;
+          selectionHeight = 300;//parseInt(sel.style('height'), 10); //selection[0][0].clientHeight;
 
         let margin = {
           top: 40,
