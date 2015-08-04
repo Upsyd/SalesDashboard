@@ -1,146 +1,166 @@
 import Helpers from '../../../Utils/helpers.js';
 
-export default class performanceWidget {
+export default class ordersWidget {
 
-  static ordersWidget(data) {
-      var tableData = prepareData(data);
+  static tableChart(options) {
+    var title = null;
+    var footer = null;
+    var highlightRows = null;
+    var tdWidths = null;
 
-      var rowsToHighlight = [{
-        name: '% of',
-        color: 'red',
-        criterion: highlightCriterion
-      }, {
-        name: '% of (PY)',
-        color: 'red',
-        criterion: highlightCriterion
-      }, {
-        name: 'Target',
-        color: 'orange',
-        criterion: function() {
-          return true;
+    function chart(selection) {
+      var updates = [];
+      selection.each(function(data) {
+        var sel = d3.select(this);
+        sel.style('opacity', 0)
+          .transition()
+          .duration(800)
+          .style('opacity', 1);
+
+        console.log(tdWidths);
+        var tdwidth = function(k) {
+          return tdWidths && k in tdWidths ? tdWidths[k] : 'null';
+        };
+
+        if (title) {
+          sel.append('div')
+            .attr('class', 'title')
+            .text(title);
         }
-      }, {
-        name: 'Target (PY)',
-        color: 'orange',
-        criterion: function() {
-          return true;
-        }
-      }];
 
-      var cellWidths = {
-        'Product': '20%',
-        'Orders': '16%',
-        '% of': '16%',
-        'Target': '16%',
-        '% of (PY)': '16%',
-        'Target (PY)': '16%'
+        var table = sel.append('table')
+          .attr('cellspacing', '0px')
+          .attr('cellpadding', '0px');
+
+        createBody();
+        if (footer) {
+          createFooter();
+        }
+
+
+        function checkHighlight(d) {
+          if (highlightRows) {
+            var retVal = null;
+            highlightRows.forEach(function(row) {
+              if (row.name === d.key) {
+                retVal = row.criterion(d.value) ? row.color : null;
+                return;
+              }
+            });
+            return retVal;
+          } else {
+            return null;
+          }
+        }
+
+        function update() {
+          table.selectAll("tr, thead, tfoot").remove();
+          createBody();
+          if (footer) {
+            createFooter();
+          }
+        }
+
+        function createBody() {
+          var thead = table.append('thead').append('tr');
+          thead.selectAll('td')
+            .data(d3.keys(data[0]))
+            .enter()
+            .append('td')
+            .style("width", function(d) {
+              return tdwidth(d);
+            })
+            .text(function(d) {
+              return d;
+            });
+
+          var rows = table.selectAll(".dataRows")
+            .data(data)
+            .enter()
+            .append("tr");
+
+          var cells = rows.selectAll("td")
+            .data(function(d) {
+              return d3.entries(d);
+            })
+            .enter()
+            .append("td")
+            .attr("class", function(d, i) {
+              return i === 0 ? null : 'value'
+            })
+            .style("color", checkHighlight)
+            .text(function(d) {
+              return d.value;
+            });
+        }
+
+        function createFooter() {
+          var tfoot = table.append('tfoot').append('tr');
+
+          tfoot.selectAll('td')
+            .data(d3.entries(footer))
+            .enter()
+            .append('td')
+            .attr("class", function(d, i) {
+              return i === 0 ? null : 'value'
+            })
+            .style("color", checkHighlight)
+            .text(function(d) {
+              return d.value;
+            });
+        }
+
+        updates.push(update);
+      });
+      return {
+        update: function(transitionDuration) {
+          updates.forEach(function(up) {
+            up();
+          });
+          return this;
+        },
+        title: function(newTitle) {
+          title = newTitle;
+          return this;
+        },
+        footer: function(newFooter) {
+          footer = newFooter;
+          return this;
+        }
       };
 
-      var selection = d3.select('#Orders');
-      var table = tableChart().title('Orders').footer(tableData[1]).tdWidths(cellWidths).highlightRows(rowsToHighlight)(selection.datum(tableData[0]));
+    }
+    chart.header = function(_) {
+      if (!arguments.length) return header;
+      header = _;
+      return chart;
+    };
 
-      Dashboard.widgets.push({
-        type: "DataTable",
-        name: "Orders",
-        obj: table,
-        selection: selection,
-        rawData: data,
-        preparedData: tableData,
-        title: function(title) {
-          this.obj.title(title);
-        },
-        // data: function( data ) { this.rawData = data; this.preparedData = prepareData( this.rawData ); this.selection.datum( this.preparedData[0] ); this.obj.footer( preparedData[1] ); },
-        filter: function(filterObj) {
-          this.preparedData = prepareData(this.rawData);
-          this.selection.datum(this.preparedData[0]);
-          this.obj.footer(preparedData[1]);
-        },
-        update: function(transitionDuration) {
-          this.obj.update(transitionDuration);
-        }
-      });
+    chart.footer = function(_) {
+      if (!arguments.length) return footer;
+      footer = _;
+      return chart;
+    };
 
-      function prepareData(data, filterObj) {
-        var filterObj = filterObj ? filterObj : {};
-        var dataFiltered = filterData(data, filterObj);
-        calcAdditionalOrdersData(dataFiltered, data); // For previous Year
+    chart.title = function(_) {
+      if (!arguments.length) return title;
+      title = _;
+      return chart;
+    };
 
-        var dataGrouped = _.groupBy(dataFiltered, 'Product');
+    chart.highlightRows = function(_) {
+      if (!arguments.length) return highlightRows;
+      highlightRows = _;
+      return chart;
+    };
 
-        var dataReduced = [];
-        for (var key in dataGrouped) {
-          dataReduced.push({
-            'Product': key,
-            'Ordersnum': d3.sum(dataGrouped[key], function(d) {
-              return isNumber(d.Ordersnum) ? d.Ordersnum : 0;
-            }),
-            'Orderstargetnum': d3.sum(dataGrouped[key], function(d) {
-              return isNumber(d.Orderstargetnum) ? d.Orderstargetnum : 0;
-            }),
-            'Orderstargetnumprev': d3.sum(dataGrouped[key], function(d) {
-              return isNumber(d.Orderstargetnumprev) ? d.Orderstargetnumprev : 0;
-            }),
-          });
-        }
+    chart.tdWidths = function(_) {
+      if (!arguments.length) return tdWidths;
+      tdWidths = _;
+      return chart;
+    };
 
-        var bodyData = _.map(dataReduced, function(d) {
-          return {
-            // 'Location': d.Orglevel1 + ' ' + d.Orglevel2 + ' ' + d.Orglevel3,
-            'Product': d.Product,
-            'Orders': +d.Ordersnum,
-            '% of': isNumber(+d.Ordersnum / d.Orderstargetnum) ? formatValue(+d.Ordersnum / d.Orderstargetnum * 100) + '%' : '',
-            'Target': +d.Orderstargetnum,
-            '% of (PY)': isNumber(+d.Ordersnum / d.Orderstargetnumprev) ? formatValue(+d.Ordersnum / d.Orderstargetnumprev * 100) + '%' : '',
-            'Target (PY)': isNumber(d.Orderstargetnumprev) ? +d.Orderstargetnumprev : ''
-          }
-        });
-
-        var footerData = {
-          'Product': 'TOTAL',
-          'Orders': null,
-          '% of': null,
-          'Target': null,
-          '% of (PY)': null,
-          'Target (PY)': null
-        };
-        footerData['Orders'] = d3.sum(dataReduced, function(d) {
-          return +d.Ordersnum;
-        });
-        footerData['Target'] = d3.sum(dataReduced, function(d) {
-          return +d.Orderstargetnum;
-        });
-        footerData['Target (PY)'] = d3.sum(dataReduced, function(d) {
-          return +d.Orderstargetnumprev;
-        });
-        footerData['% of'] = isNumber(footerData['Orders'] / footerData['Target']) ? formatValue(footerData['Orders'] / footerData['Target'] * 100) + '%' : '';
-        footerData['% of (PY)'] = isNumber(footerData['Orders'] / footerData['Target (PY)']) ? formatValue(footerData['Orders'] / footerData['Target (PY)'] * 100) + '%' : '';
-
-        return [bodyData, footerData];
-
-      }
-
-      function highlightCriterion(d) {
-        return parseFloat(d) < 100;
-      }
-
-      function calcAdditionalOrdersData(dataFiltered, data) {
-        _.each(dataFiltered, function(d, i) {
-          var prevYearElement = _.findWhere(data, {
-            Year: d.Year - 1,
-            Week: d.Week,
-            Product: d.Product,
-            Orglevel1: d.Orglevel1,
-            Orglevel2: d.Orglevel2,
-            Orglevel3: d.Orglevel3
-          });
-
-          if (prevYearElement) {
-            d.Orderstargetnumprev = prevYearElement.Orderstargetnum;
-          } else {
-            d.Orderstargetnumprev = null;
-          }
-        });
-      }
-    },
+    return chart;
+  }
 
 }

@@ -37,7 +37,7 @@ export default class Helpers {
 
     // if ( Math.abs( value ) > 1000000 )  formattedValue = numberWithSeparator( Math.round( value/1000 ) ) + 'K';
     if (Math.abs(value) > 100) {
-      formattedValue = numberWithSeparator(Math.round(value));
+      formattedValue = this.numberWithSeparator(Math.round(value));
     } else if (Math.abs(value) > 10) {
       formattedValue = Math.round(value);
     } else {
