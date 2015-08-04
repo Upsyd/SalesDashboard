@@ -9,7 +9,7 @@ export default class AdditionalServices extends Component {
     let { className } = this.props;
     return (
       <div className={ `${ className } ${ styles }` }>
-        AdditionalServices in DOM
+        <div className='widget dataTable' id='AdditionalServices'></div>
       </div>
     );
   }

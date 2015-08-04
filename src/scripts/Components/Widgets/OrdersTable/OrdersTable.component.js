@@ -9,7 +9,7 @@ export default class OrdersTable extends Component {
     let { className } = this.props;
     return (
       <div className={ `${ className } ${ styles }` }>
-        Orders
+        <div className='widget dataTable' id='Orders'></div>
       </div>
     );
   }

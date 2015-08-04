@@ -11,7 +11,8 @@ export default class Performance extends Component {
     let { className } = this.props;
     return (
       <div className={ `${ className } ${ styles }` }>
-        <div className='widget lineChart' id='Performance' />
+        <div className='widget lineChart'
+          id='Performance' />
       </div>
     );
   }
