@@ -1,7 +1,12 @@
-import { EXAMPLE } from '../Constants/ActionTypes';
+/*
+ * action types
+ */
 
-export function example() {
+export const EXAMPLE = 'EXAMPLE';
+
+export function example(text) {
   return {
-    type: EXAMPLE
+    type: EXAMPLE,
+    text
   };
 }
