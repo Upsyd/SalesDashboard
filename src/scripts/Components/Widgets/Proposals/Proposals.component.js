@@ -9,7 +9,6 @@ export default class Proposals extends Component {
     let { className } = this.props;
     return (
       <div className={ `${ className } ${ styles }` }>
-        Proposals
       </div>
     );
   }

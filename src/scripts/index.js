@@ -12,10 +12,9 @@ let store = createStore(reducersApp);
 let rootElement = document.getElementById('Dashboard');
 React.render(
   <div>
-    <Provider store={store}>
+    <Provider store={ store }>
       {() => <App />}
     </Provider>
-    {renderDevTools(store)}
   </div>,
   rootElement
 );

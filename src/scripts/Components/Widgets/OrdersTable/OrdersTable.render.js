@@ -16,8 +16,7 @@ export default class ordersWidget {
           .transition()
           .duration(800)
           .style('opacity', 1);
-
-        console.log(tdWidths);
+          
         var tdwidth = function(k) {
           return tdWidths && k in tdWidths ? tdWidths[k] : 'null';
         };

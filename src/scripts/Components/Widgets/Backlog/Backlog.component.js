@@ -9,7 +9,7 @@ export default class Backlog extends Component {
     let { className } = this.props;
     return (
       <div className={ `${ className } ${ styles }` }>
-        Backlog in DOM
+
       </div>
     );
   }

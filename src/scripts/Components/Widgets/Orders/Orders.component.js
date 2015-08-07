@@ -9,7 +9,6 @@ export default class Orders extends Component {
     let { className } = this.props;
     return (
       <div className={ `${ className } ${ styles }` }>
-        Orders
       </div>
     );
   }
