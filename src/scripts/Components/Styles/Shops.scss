@@ -7,10 +7,8 @@
   line-height: 14px;
 
   p {
-    padding: 2px 4px;
+    padding: 4px 8px;
     border-radius: 3px;
-
-    border: 1px solid #FFF;
 
     cursor: pointer;
 
@@ -19,13 +17,11 @@
     }
 
     &:hover {
-      border: 1px solid #000;
+      background: rgba(0, 0, 0, .03);
     }
 
-    &.acive {
-      color: #FFF;
-      background: #000;
-      border: 1px solid #000;
+    &.active {
+      background: rgba(0, 0, 0, .05);
     }
   }
 

@@ -1,151 +1,22 @@
+import $ from 'jquery';
+import Helpers from '../Utils/helpers.js';
+
+let itemsData = [];
+
+$.ajax({
+  url: '../../../CSV/Orders.csv',
+  async: false,
+  success: function(csv) {
+    itemsData = JSON.parse(Helpers.CSV2JSON(csv, ';'));
+  },
+  dataType: 'text',
+});
+
 let shops = {
   week: 17,
+  selectedItems: [],
 
-  items: [{
-    Year: '2015',
-    Week: '17',
-    Orglevel1: 'SWEDEN',
-    Orglevel2: 'STOCKHOLM',
-    Orglevel3: 'STORE1',
-  }, {
-    Year: '2015',
-    Week: '17',
-    Orglevel1: 'SWEDEN',
-    Orglevel2: 'STOCKHOLM',
-    Orglevel3: 'STORE1',
-  }, {
-    Year: '2015',
-    Week: '17',
-    Orglevel1: 'SWEDEN',
-    Orglevel2: 'STOCKHOLM',
-    Orglevel3: 'STORE1',
-  }, {
-    Year: '2015',
-    Week: '17',
-    Orglevel1: 'SWEDEN',
-    Orglevel2: 'STOCKHOLM',
-    Orglevel3: 'STORE2',
-  }, {
-    Year: '2015',
-    Week: '17',
-    Orglevel1: 'SWEDEN',
-    Orglevel2: 'STOCKHOLM',
-    Orglevel3: 'STORE2',
-  }, {
-    Year: '2015',
-    Week: '17',
-    Orglevel1: 'SWEDEN',
-    Orglevel2: 'STOCKHOLM',
-    Orglevel3: 'STORE2',
-  }, {
-    Year: '2015',
-    Week: '17',
-    Orglevel1: 'SWEDEN',
-    Orglevel2: 'MALMÖ',
-    Orglevel3: 'STORE3',
-  }, {
-    Year: '2015',
-    Week: '17',
-    Orglevel1: 'SWEDEN',
-    Orglevel2: 'MALMÖ',
-    Orglevel3: 'STORE3',
-  }, {
-    Year: '2015',
-    Week: '17',
-    Orglevel1: 'SWEDEN',
-    Orglevel2: 'MALMÖ',
-    Orglevel3: 'STORE3',
-  }, {
-    Year: '2015',
-    Week: '17',
-    Orglevel1: 'SWEDEN',
-    Orglevel2: 'MALMÖ',
-    Orglevel3: 'STORE4',
-  }, {
-    Year: '2015',
-    Week: '17',
-    Orglevel1: 'SWEDEN',
-    Orglevel2: 'MALMÖ',
-    Orglevel3: 'STORE4',
-  }, {
-    Year: '2015',
-    Week: '17',
-    Orglevel1: 'SWEDEN',
-    Orglevel2: 'MALMÖ',
-    Orglevel3: 'STORE4',
-  }, {
-    Year: '2015',
-    Week: '18',
-    Orglevel1: 'SWEDEN',
-    Orglevel2: 'STOCKHOLM',
-    Orglevel3: 'STORE1',
-  }, {
-    Year: '2015',
-    Week: '18',
-    Orglevel1: 'SWEDEN',
-    Orglevel2: 'STOCKHOLM',
-    Orglevel3: 'STORE1',
-  }, {
-    Year: '2015',
-    Week: '18',
-    Orglevel1: 'SWEDEN',
-    Orglevel2: 'STOCKHOLM',
-    Orglevel3: 'STORE1',
-  }, {
-    Year: '2015',
-    Week: '18',
-    Orglevel1: 'SWEDEN',
-    Orglevel2: 'STOCKHOLM',
-    Orglevel3: 'STORE2',
-  }, {
-    Year: '2015',
-    Week: '18',
-    Orglevel1: 'SWEDEN',
-    Orglevel2: 'STOCKHOLM',
-    Orglevel3: 'STORE2',
-  }, {
-    Year: '2015',
-    Week: '18',
-    Orglevel1: 'SWEDEN',
-    Orglevel2: 'STOCKHOLM',
-    Orglevel3: 'STORE2',
-  }, {
-    Year: '2015',
-    Week: '18',
-    Orglevel1: 'SWEDEN',
-    Orglevel2: 'MALMÖ',
-    Orglevel3: 'STORE3',
-  }, {
-    Year: '2015',
-    Week: '18',
-    Orglevel1: 'SWEDEN',
-    Orglevel2: 'MALMÖ',
-    Orglevel3: 'STORE3',
-  }, {
-    Year: '2015',
-    Week: '18',
-    Orglevel1: 'SWEDEN',
-    Orglevel2: 'MALMÖ',
-    Orglevel3: 'STORE3',
-  }, {
-    Year: '2015',
-    Week: '18',
-    Orglevel1: 'SWEDEN',
-    Orglevel2: 'MALMÖ',
-    Orglevel3: 'STORE4',
-  }, {
-    Year: '2015',
-    Week: '18',
-    Orglevel1: 'SWEDEN',
-    Orglevel2: 'MALMÖ',
-    Orglevel3: 'STORE4',
-  }, {
-    Year: '2015',
-    Week: '18',
-    Orglevel1: 'SWEDEN',
-    Orglevel2: 'MALMÖ',
-    Orglevel3: 'STORE4',
-  }]
+  items: itemsData
 };
 
 module.exports = shops;

@@ -23,7 +23,7 @@ class CountriesList extends Component {
       <div className='countries'>
         { countries.map((country) => {
           return (
-            <p className='country'>
+            <p className='country active'>
               { country }
               <CitiesList { ...this.props } />
             </p>
