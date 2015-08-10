@@ -1,168 +1,42 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
+import { connect } from 'react-redux';
+import { setShops } from '../Actions/Actions.js';
 
 // Component styles
 import 'style!./Styles/Weeks.scss';
 let styles = require('./Styles/Weeks.scss').locals.styles;
 
-// Temp data
-let data = [{
-  Year: '2015',
-  Week: '17',
-  Orglevel1: 'SWEDEN',
-  Orglevel2: 'STOCKHOLM',
-  Orglevel3: 'STORE1',
-}, {
-  Year: '2015',
-  Week: '17',
-  Orglevel1: 'SWEDEN',
-  Orglevel2: 'STOCKHOLM',
-  Orglevel3: 'STORE1',
-}, {
-  Year: '2015',
-  Week: '17',
-  Orglevel1: 'SWEDEN',
-  Orglevel2: 'STOCKHOLM',
-  Orglevel3: 'STORE1',
-}, {
-  Year: '2015',
-  Week: '17',
-  Orglevel1: 'SWEDEN',
-  Orglevel2: 'STOCKHOLM',
-  Orglevel3: 'STORE2',
-}, {
-  Year: '2015',
-  Week: '17',
-  Orglevel1: 'SWEDEN',
-  Orglevel2: 'STOCKHOLM',
-  Orglevel3: 'STORE2',
-}, {
-  Year: '2015',
-  Week: '17',
-  Orglevel1: 'SWEDEN',
-  Orglevel2: 'STOCKHOLM',
-  Orglevel3: 'STORE2',
-}, {
-  Year: '2015',
-  Week: '17',
-  Orglevel1: 'SWEDEN',
-  Orglevel2: 'MALMÖ',
-  Orglevel3: 'STORE3',
-}, {
-  Year: '2015',
-  Week: '17',
-  Orglevel1: 'SWEDEN',
-  Orglevel2: 'MALMÖ',
-  Orglevel3: 'STORE3',
-}, {
-  Year: '2015',
-  Week: '17',
-  Orglevel1: 'SWEDEN',
-  Orglevel2: 'MALMÖ',
-  Orglevel3: 'STORE3',
-}, {
-  Year: '2015',
-  Week: '17',
-  Orglevel1: 'SWEDEN',
-  Orglevel2: 'MALMÖ',
-  Orglevel3: 'STORE4',
-}, {
-  Year: '2015',
-  Week: '17',
-  Orglevel1: 'SWEDEN',
-  Orglevel2: 'MALMÖ',
-  Orglevel3: 'STORE4',
-}, {
-  Year: '2015',
-  Week: '17',
-  Orglevel1: 'SWEDEN',
-  Orglevel2: 'MALMÖ',
-  Orglevel3: 'STORE4',
-}, {
-  Year: '2015',
-  Week: '18',
-  Orglevel1: 'SWEDEN',
-  Orglevel2: 'STOCKHOLM',
-  Orglevel3: 'STORE1',
-}, {
-  Year: '2015',
-  Week: '18',
-  Orglevel1: 'SWEDEN',
-  Orglevel2: 'STOCKHOLM',
-  Orglevel3: 'STORE1',
-}, {
-  Year: '2015',
-  Week: '18',
-  Orglevel1: 'SWEDEN',
-  Orglevel2: 'STOCKHOLM',
-  Orglevel3: 'STORE1',
-}, {
-  Year: '2015',
-  Week: '18',
-  Orglevel1: 'SWEDEN',
-  Orglevel2: 'STOCKHOLM',
-  Orglevel3: 'STORE2',
-}, {
-  Year: '2015',
-  Week: '18',
-  Orglevel1: 'SWEDEN',
-  Orglevel2: 'STOCKHOLM',
-  Orglevel3: 'STORE2',
-}, {
-  Year: '2015',
-  Week: '18',
-  Orglevel1: 'SWEDEN',
-  Orglevel2: 'STOCKHOLM',
-  Orglevel3: 'STORE2',
-}, {
-  Year: '2015',
-  Week: '18',
-  Orglevel1: 'SWEDEN',
-  Orglevel2: 'MALMÖ',
-  Orglevel3: 'STORE3',
-}, {
-  Year: '2015',
-  Week: '18',
-  Orglevel1: 'SWEDEN',
-  Orglevel2: 'MALMÖ',
-  Orglevel3: 'STORE3',
-}, {
-  Year: '2015',
-  Week: '18',
-  Orglevel1: 'SWEDEN',
-  Orglevel2: 'MALMÖ',
-  Orglevel3: 'STORE3',
-}, {
-  Year: '2015',
-  Week: '18',
-  Orglevel1: 'SWEDEN',
-  Orglevel2: 'MALMÖ',
-  Orglevel3: 'STORE4',
-}, {
-  Year: '2015',
-  Week: '18',
-  Orglevel1: 'SWEDEN',
-  Orglevel2: 'MALMÖ',
-  Orglevel3: 'STORE4',
-}, {
-  Year: '2015',
-  Week: '18',
-  Orglevel1: 'SWEDEN',
-  Orglevel2: 'MALMÖ',
-  Orglevel3: 'STORE4',
-}];
-
-export default class Weeks extends Component {
+class Weeks extends Component {
+  handleClick() {
+    let xxx = {
+      Year: '2019999',
+      Week: '18',
+      Orglevel1: 'SWEDEN',
+      Orglevel2: 'GAVNO',
+      Orglevel3: 'STORE4',
+    }
+    this.props.dispatch(setShops(xxx))
+  }
   render() {
     return (
       <div className={ `${ styles }` }>
         <select className='selectpicker'>
-          { data.map((shop) => {
+          { this.props.shops.map((shop) => {
             return <option>
                 { shop.Week }
               </option>
           })}
         </select>
+        <div onClick={ e => this.handleClick(e) }>123</div>
       </div>
     );
   }
 }
+
+function select(state) {
+  return {
+    shops: state.shops
+  };
+}
+
+export default connect(select)(Weeks);

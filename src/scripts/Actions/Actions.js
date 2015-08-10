@@ -2,10 +2,11 @@
  * action types
  */
 
-export const GETSHOPS = 'GETSHOPS';
+export const SETSHOPS = 'SETSHOPS';
 
-export function getShops() {
+export function setShops(shop) {
   return {
-    type: GETSHOPS
+    type: SETSHOPS,
+    shop
   };
 }
