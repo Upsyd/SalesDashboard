@@ -15,9 +15,10 @@ class Shops extends Component {
       Orglevel2: 'GAVNO',
       Orglevel3: 'STORE4',
     }
-    this.props.dispatch(setShops(xxx))
+    this.props.dispatch(setShops(xxx));
   }
   render() {
+    console.log(this.props.shops)
     return (
       <div className={ `${ styles } list-group` }>
         { this.props.shops.map((shop) => {

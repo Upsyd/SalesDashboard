@@ -15,7 +15,7 @@ class Weeks extends Component {
       Orglevel2: 'GAVNO',
       Orglevel3: 'STORE4',
     }
-    this.props.dispatch(setShops(xxx))
+    this.props.dispatch(setShops(xxx));
   }
   render() {
     return (
