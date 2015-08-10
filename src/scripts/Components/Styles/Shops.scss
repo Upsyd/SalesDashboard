@@ -1,5 +1,56 @@
 :local(.styles) {
   margin-top: 20px;
+  
+  text-transform: lowercase;
 
-  font-size: 8px;
+  font-size: 14px;
+  line-height: 18px;
+
+  p {
+    padding: 2px 4px;
+    border-radius: 3px;
+
+    border: 1px solid #FFF;
+
+    cursor: pointer;
+
+    &::first-letter {
+      text-transform: uppercase;
+    }
+
+    &:hover {
+      border: 1px solid #000;
+    }
+
+    &.acive {
+      color: #FFF;
+      background: #000;
+      border: 1px solid #000;
+    }
+  }
+
+  .countries {
+    margin-bottom: 10px;
+
+    .country {
+
+    }
+  }
+
+  .cities {
+    padding-left: 10px;
+
+    .city {
+      
+    }
+  }
+
+  .shops {
+    padding-left: 10px;
+    margin-bottom: 10px;
+    
+    .shop {
+      
+    }
+  }
 }

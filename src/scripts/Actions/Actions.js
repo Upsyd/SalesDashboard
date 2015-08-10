@@ -8,3 +8,18 @@ export function setShops(shop) {
     shop
   };
 }
+
+export function weekIncrease(week) {
+  return {
+    type: 'WEEKINCREASE',
+    week
+  };
+}
+
+export function weekDecrease(week) {
+  return {
+    type: 'WEEKDECREASE',
+    week
+  };
+}
+

@@ -19,7 +19,7 @@ var Dashboard = {
   createWidget: function(file, widgetFunction, filterObj) {
     var ssvParser = d3.dsv(";", "text/plain");
     ssvParser(file, widgetFunction);
-    ssvParser(file, function(data) { console.log(data) });
+    // ssvParser(file, function(data) { console.log(data) });
   },
   ordersWidget: function(data) {
     var tableData = prepareData(data);

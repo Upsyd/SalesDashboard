@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import _ from 'underscore';
-import { setShops, getCountries } from '../Actions/Actions.js';
 
 // Component styles
 import 'style!./Styles/Shops.scss';
@@ -24,10 +23,10 @@ class CountriesList extends Component {
       <div className='countries'>
         { countries.map((country) => {
           return (
-            <div className='country'>
+            <p className='country'>
               { country }
               <CitiesList { ...this.props } />
-            </div>
+            </p>
           );
         })}
       </div>
@@ -42,10 +41,10 @@ class CitiesList extends Component {
       <div className='cities'>
         { cities.map((city) => {
           return (
-            <div className='city'>
+            <p className='city'>
               { city }
               <ShopsList { ...this.props } />
-            </div>
+            </p>
           );
         })}
       </div>
@@ -60,9 +59,9 @@ class ShopsList extends Component {
       <div className='shops'>
         { shops.map((shop) => {
           return (
-            <div className='shop'>
+            <p className='shop'>
               { shop }
-            </div>
+            </p>
           );
         })}
       </div>
@@ -74,7 +73,7 @@ function select(state) {
   function getCountries(data) {
     let countries = [];
 
-    data.map((shop) => {
+    data.items.map((shop) => {
       countries.push(shop.Orglevel1);
     });
 
@@ -84,7 +83,7 @@ function select(state) {
   function getCities(data) {
     let cities = [];
 
-    data.map((shop) => {
+    data.items.map((shop) => {
       cities.push(shop.Orglevel2);
     });
 
@@ -94,7 +93,7 @@ function select(state) {
   function getShop(data) {
     let shops = [];
 
-    data.map((shop) => {
+    data.items.map((shop) => {
       shops.push(shop.Orglevel3);
     });
 

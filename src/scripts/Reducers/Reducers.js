@@ -5,8 +5,7 @@ import shopsData from './Shops.js';
  * Shops
  */
 export function shops(state = shopsData, action) {
-  let newState = [...state];
-  console.log(action)
+  let newState = {...state};
 
   switch (action.type) {
   case 'SETSHOPS':
@@ -21,9 +20,15 @@ export function shops(state = shopsData, action) {
  * Weeks
  */
 export function weeks(state = shopsData, action) {
-  let newState = [...state];
+  let newState = {...state};
 
   switch (action.type) {
+  case 'WEEKINCREASE':
+    newState.week++;
+    return newState;
+  case 'WEEKDECREASE':
+    newState.week--;
+    return newState;
   default:
     return state;
   }
