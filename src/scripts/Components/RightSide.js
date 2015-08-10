@@ -23,6 +23,8 @@ export default class RightSide extends Component {
   render() {
     return (
       <div className={ `${ styles }` }>
+        { /* 
+        Widget fot the next oteration:
         <div className='row'>
           <div className='col-md-1 col-lg-1'>
             <Proposals className={ stylesWidget } />
@@ -40,6 +42,7 @@ export default class RightSide extends Component {
             <Backlog className={ stylesWidget } />
           </div>
         </div>
+        */ }
         <div className='row'>
           <div className='col-md-6 col-lg-6'>
             <OrdersTable className={ stylesWidget } />

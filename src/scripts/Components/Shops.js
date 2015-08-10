@@ -1,47 +1,111 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { setShops } from '../Actions/Actions.js';
+import _ from 'underscore';
+import { setShops, getCountries } from '../Actions/Actions.js';
 
 // Component styles
 import 'style!./Styles/Shops.scss';
 let styles = require('./Styles/Shops.scss').locals.styles;
-var xxx = {
-  Year: '2019999',
-  Week: '18',
-  Orglevel1: 'SWEDEN',
-  Orglevel2: 'GAVNO',
-  Orglevel3: 'STORE4',
-}
 
 class Shops extends Component {
-  handleClick() {
-    let xxx = {
-      Year: '2019999',
-      Week: '18',
-      Orglevel1: 'SWEDEN',
-      Orglevel2: 'GAVNO',
-      Orglevel3: 'STORE4',
-    }
-    this.props.dispatch(setShops(xxx));
-  }
   render() {
-    const { dispatch } = this.props;
     return (
       <div className={ `${ styles } list-group` }>
-        { this.props.shops.map((shop) => {
-          return <a href='#' className='list-group-item'>
-            { shop.Orglevel1 }, { shop.Orglevel2 }, { shop.Orglevel3 }
-          </a>
+        <CountriesList { ...this.props } />
+      </div>
+    );
+  }
+}
+
+class CountriesList extends Component {
+  render() {
+    const { countries } = this.props;
+    return (
+      <div className='countries'>
+        { countries.map((country) => {
+          return (
+            <div className='country'>
+              { country }
+              <CitiesList { ...this.props } />
+            </div>
+          );
         })}
-      <div onClick={ () => dispatch(setShops(xxx)) }>123</div>
+      </div>
+    );
+  }
+}
+
+class CitiesList extends Component {
+  render() {
+    const { cities } = this.props;
+    return (
+      <div className='cities'>
+        { cities.map((city) => {
+          return (
+            <div className='city'>
+              { city }
+              <ShopsList { ...this.props } />
+            </div>
+          );
+        })}
+      </div>
+    );
+  }
+}
+
+class ShopsList extends Component {
+  render() {
+    const { shops } = this.props;
+    return (
+      <div className='shops'>
+        { shops.map((shop) => {
+          return (
+            <div className='shop'>
+              { shop }
+            </div>
+          );
+        })}
       </div>
     );
   }
 }
 
 function select(state) {
+  function getCountries(data) {
+    let countries = [];
+
+    data.map((shop) => {
+      countries.push(shop.Orglevel1);
+    });
+
+    return _.uniq(countries);
+  };
+
+  function getCities(data) {
+    let cities = [];
+
+    data.map((shop) => {
+      cities.push(shop.Orglevel2);
+    });
+
+    return _.uniq(cities);
+  };
+
+  function getShop(data) {
+    let shops = [];
+
+    data.map((shop) => {
+      shops.push(shop.Orglevel3);
+    });
+
+    return _.uniq(shops);
+  };
+
   return {
-    shops: state.shops
+    // shops: state.shops,
+    countries: getCountries(state.shops),
+    cities: getCities(state.shops),
+    shops: getShop(state.shops),
   };
 }
 
