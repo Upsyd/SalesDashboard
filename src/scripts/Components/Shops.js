@@ -9,7 +9,7 @@ let styles = require('./Styles/Shops.scss').locals.styles;
 class Shops extends Component {
   render() {
     return (
-      <div className={ `${ styles } list-group` }>
+      <div className={ `${ styles }` }>
         <CountriesList { ...this.props } />
       </div>
     );

@@ -1,6 +1,10 @@
 :local(.styles) {
   font-weight: bold;
 
+  h4 {
+    margin-top: 0;
+  }
+
   .decrease, .increase {
     cursor: pointer;
   }

@@ -14,23 +14,27 @@ class Weeks extends Component {
     const { week, weeks, dispatch } = this.props;
     let max = weeks[weeks.length - 1];
     
-    // console.log(week)
-    // dispatch(weekIncrease()) ? week < max : null;
-    dispatch(weekIncrease());
+    if (week < max) {
+      dispatch(weekIncrease());
+    }
   }
 
   decrease() {
-    const { dispatch } = this.props;
+    const { week, weeks, dispatch } = this.props;
     let min = weeks[0];
 
-    // dispatch(weekIncrease()) ? week > min : null;
-    dispatch(weekDecrease())
+    if (week > min) {
+      dispatch(weekDecrease());
+    }
   }
 
   render() {
     const { week } = this.props;
     return (
       <div className={ `${ styles } row` }>
+        <div className='col-md-12'>
+          <h4>Weeks</h4>
+        </div>
         <div className='decrease col-md-2'
           onClick={ () => this.decrease() }>-</div>
         <div className='currentWeek col-md-2'>
@@ -56,7 +60,7 @@ function select(state) {
 
   return {
     weeks: getWeeks(state.weeks),
-    week: state.shops.week,
+    week: state.weeks.week,
   };
 }
 

@@ -1,5 +1,6 @@
 import { SETSHOPS } from '../Actions/Actions';
 import shopsData from './Shops.js';
+import weeksData from './Weeks.js';
 
 /**
  * Shops
@@ -19,7 +20,7 @@ export function shops(state = shopsData, action) {
 /**
  * Weeks
  */
-export function weeks(state = shopsData, action) {
+export function weeks(state = weeksData, action) {
   let newState = {...state};
 
   switch (action.type) {
