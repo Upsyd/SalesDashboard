@@ -5,7 +5,7 @@ export function shops(state = shopsData, action) {
   let newState = [...state];
 
   switch (action.type) {
-  case SETSHOPS:
+  case 'SETSHOPS':
     newState.push(action.shop);
     return newState
   default:
