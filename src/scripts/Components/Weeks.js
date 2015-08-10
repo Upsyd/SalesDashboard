@@ -14,7 +14,7 @@ class Weeks extends Component {
     const { week, weeks, dispatch } = this.props;
     let max = weeks[weeks.length - 1];
     
-    console.log(week)
+    // console.log(week)
     // dispatch(weekIncrease()) ? week < max : null;
     dispatch(weekIncrease());
   }
@@ -30,11 +30,13 @@ class Weeks extends Component {
   render() {
     const { week } = this.props;
     return (
-      <div className={ `${ styles }` }>
-        <div className='decrease'
+      <div className={ `${ styles } row` }>
+        <div className='decrease col-md-2'
           onClick={ () => this.decrease() }>-</div>
-        { week }
-        <div className='increase'
+        <div className='currentWeek col-md-2'>
+          { week }
+        </div>
+        <div className='increase col-md-2'
           onClick={ () => this.increase() }>+</div>
       </div>
     );

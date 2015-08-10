@@ -1,9 +1,11 @@
 :local(.styles) {
-  position: relative;
+  font-weight: bold;
 
-  select {
-    padding: 10px;
+  .decrease, .increase {
+    cursor: pointer;
+  }
+
+  .currentWeek {
     
-    width: 100%;
   }
 }

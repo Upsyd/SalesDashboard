@@ -3,8 +3,8 @@
   
   text-transform: lowercase;
 
-  font-size: 14px;
-  line-height: 18px;
+  font-size: 12px;
+  line-height: 14px;
 
   p {
     padding: 2px 4px;
@@ -33,7 +33,7 @@
     margin-bottom: 10px;
 
     .country {
-
+      font-weight: 600;
     }
   }
 
@@ -41,7 +41,7 @@
     padding-left: 10px;
 
     .city {
-      
+      font-weight: 400;
     }
   }
 
@@ -50,7 +50,7 @@
     margin-bottom: 10px;
     
     .shop {
-      
+      font-weight: 100;
     }
   }
 }
