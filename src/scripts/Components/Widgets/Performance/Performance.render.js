@@ -1,11 +1,19 @@
 import _ from 'underscore';
-import Dashboard from '../../Dashboard.js';
 import Helpers from '../../../Utils/helpers.js';
 
 export default class performanceWidget {
 
-  static performanceWidget(data) {
-    var chartData = prepareData(data);
+  static render(data) {
+    // Parse Date
+    var format = d3.time.format('%Y-%m-%d'); 
+    data.forEach( function(d){
+      d.Date     = format.parse( d.Date );
+      d.Measure1 = parseFloat( d.Measure1 );
+      d.Measure2 = parseFloat( d.Measure2 );
+      d.Target   = parseFloat( d.Target );
+    });
+
+    var chartData = prepareData( data );
 
     var colorMap = {
       "Measure1": "red",
@@ -19,72 +27,46 @@ export default class performanceWidget {
     Dashboard.widgets.push({
       type: "LineChart",
       name: "Performance",
-      obj: chart,
+      obj:   chart,
       selection: selection,
       rawData: data,
       preparedData: chartData,
-      title: function(title) {
-        this.obj.title(title);
-      },
+      title: function( title ) { this.obj.title( title ); },
       // data: function( data ) { this.rawData = data; this.preparedData = prepareData( this.rawData ); this.selection.datum( this.preparedData ); },
-      filter: function(filterObj) {
-        this.preparedData = prepareData(this.rawData);
-        this.selection.datum(this.preparedData);
-      },
-      update: function(transitionDuration) {
-        this.obj.update(transitionDuration);
-      }
+      // filter: function( filterObj ) {},
+      filter: function( filterObj ) { this.preparedData = prepareData( this.rawData, filterObj ); this.selection.datum( this.preparedData ); },
+      update: function( transitionDuration ) { this.obj.update( transitionDuration ); }
     });
 
-    function prepareData(data, filterObj) {
+    function prepareData( data, filterObj ) {
       var filterObj = filterObj ? filterObj : {};
-      var dataFiltered = Helpers.filterData(data, filterObj);
-
-      // Parse Date
-      var format = d3.time.format('%Y-%m-%d');
-      dataFiltered.forEach(function(d) {
-        d.Date = format.parse(d.Date);
-        d.Measure1 = parseFloat(d.Measure1);
-        d.Measure2 = parseFloat(d.Measure2);
-        d.Target = parseFloat(d.Target);
-      });
-
+      var dataFiltered = Helpers.filterData( data, filterObj );
       // Date Filter
-      dataFiltered = _.filter(dataFiltered, function(d) {
+      dataFiltered = _.filter( dataFiltered, function(d) { 
         return d.Date > format.parse('2015-04-30') - 90 * 86400000;
       });
 
-      var dataGrouped = _.groupBy(dataFiltered, 'Date');
+      var dataGrouped  =  _.groupBy( dataFiltered, 'Date' );
       // console.log( "Data Grouped:", dataGrouped );
 
       var dataReduced = [];
-      for (var key in dataGrouped) {
+      for ( var key in  dataGrouped ) {
         dataReduced.push({
-          'Date': new Date(key),
-          'Measure1': d3.mean(dataGrouped[key], function(d) {
-            return Helpers.isNumber(d.Measure1) ? d.Measure1 : 0;
-          }),
-          'Measure2': d3.mean(dataGrouped[key], function(d) {
-            return Helpers.isNumber(d.Measure2) ? d.Measure2 : 0;
-          }),
-          'Target': d3.mean(dataGrouped[key], function(d) {
-            return Helpers.isNumber(d.Target) ? d.Target : 0;
-          })
+          'Date'        : new Date( key ),
+          'Measure1'    : d3.mean( dataGrouped[key], function(d) { return Helpers.isNumber(d.Measure1) ? d.Measure1 : 0; } ),
+          'Measure2'    : d3.mean( dataGrouped[key], function(d) { return Helpers.isNumber(d.Measure2) ? d.Measure2 : 0; } ),
+          'Target'      : d3.mean( dataGrouped[key], function(d) { return Helpers.isNumber(d.Target) ? d.Target : 0; } )
         });
       }
       // console.log( "Data Reduced:", dataReduced );
 
-      var chartData = _.reduce(dataReduced, function(memo, item) {
-        var measure1Arr = _.chain(memo[0]).push(Helpers.renameProperty(_.pick(item, ['Date', 'Measure1']), 'Measure1', 'value')).value();
-        var measure2Arr = _.chain(memo[1]).push(Helpers.renameProperty(_.pick(item, ['Date', 'Measure2']), 'Measure2', 'value')).value();
-        var targetArr = _.chain(memo[2]).push(Helpers.renameProperty(_.pick(item, ['Date', 'Target']), 'Target', 'value')).value();
+      var chartData = _.reduce( dataReduced, function(memo, item){
+        var measure1Arr  = _.chain( memo[0] ).push( Helpers.renameProperty( _.pick( item, ['Date', 'Measure1'] ), 'Measure1', 'value') ).value();
+        var measure2Arr  = _.chain( memo[1] ).push( Helpers.renameProperty( _.pick( item, ['Date', 'Measure2'] ), 'Measure2', 'value') ).value();
+        var targetArr    = _.chain( memo[2] ).push( Helpers.renameProperty( _.pick( item, ['Date', 'Target'] ), 'Target', 'value') ).value();
 
-        return [measure1Arr, measure2Arr, targetArr];
-      }, [
-        [],
-        [],
-        []
-      ]);
+        return [ measure1Arr, measure2Arr, targetArr ];
+      }, [ [], [], [] ]);
       // console.log( "Chart Data:",  chartData );
 
       return chartData;
@@ -99,13 +81,14 @@ export default class performanceWidget {
       let updates = [];
       selection.each(function(data) {
         let sel = d3.select(this);
+        sel.selectAll('svg').remove();
         sel.style('opacity', 0)
           .transition()
           .duration(800)
           .style('opacity', 1);
 
         let selectionWidth = parseInt(sel.style('width'), 10), //selection[0][0].clientWidth,
-          selectionHeight = 300; //parseInt(sel.style('height'), 10); //selection[0][0].clientHeight;
+          selectionHeight = selectionWidth*0.75; //parseInt(sel.style('height'), 10); //selection[0][0].clientHeight;
 
         let margin = {
           top: 40,
@@ -376,8 +359,11 @@ export default class performanceWidget {
 
 
         function update(transitionDuration) {
+          data = sel[0][0].__data__;
+
           selectionWidth = parseInt(sel.style('width'), 10);
-          selectionHeight = parseInt(sel.style('height'), 10);
+          // selectionHeight = parseInt(sel.style('height'), 10);
+          selectionHeight = selectionWidth*0.75;
           width = selectionWidth - margin.left - margin.right;
           height = selectionHeight - margin.top - margin.bottom;
 
@@ -403,8 +389,13 @@ export default class performanceWidget {
             });
           x.range([0, width]);
           y.range([height, 0]);
-          x.domain([xMin, xMax]);
-          y.domain([yMin - (100 - yMin) / 4, 100]);
+
+          if ( xMin && xMax ) {
+            x.domain( [ xMin, xMax ] );
+          }
+          if ( yMin ) {
+            y.domain( [ yMin-(100-yMin)/4, 100 ] );
+          }
 
           if (title) {
             chart.select('text.title')
@@ -416,6 +407,7 @@ export default class performanceWidget {
           if (transitionDuration) {
             xAxis.transition()
               .duration(transitionDuration)
+              .attr('transform', 'translate(0,' + height + ')')
               .call(makeXAxis);
 
             yAxis.transition()
@@ -430,49 +422,67 @@ export default class performanceWidget {
               .duration(transitionDuration)
               .call(makeYGrid().tickSize(-width, 0, 0).tickFormat(''));
 
-            lines.transition()
-              .duration(transitionDuration)
-              .attr('d', function(d) {
-                return line(d);
-              });
+            lines.each( function(d){
+              if ( d.length === 0 ) {
+                d3.select( this ).transition()
+                  .duration( transitionDuration )
+                  .style( 'opacity', 0 );
+              } else {
+                d3.select( this ).transition()
+                  .duration( transitionDuration )
+                  .attr( 'd', function(d) { return d.length === 0 ? null : line( d ); } )
+                  .style( 'opacity', 1 );
+              }
+            });
 
             linesTransparent.transition()
-              .duration(transitionDuration)
-              .attr('d', function(d) {
-                return line(d);
-              });
+              .duration( transitionDuration )
+              .attr( 'd', function(d) { return d.length === 0 ? null : line( d ); } )
+              .style( 'opacity', 1 );
 
-            dataLabels.transition()
-              .duration(transitionDuration)
-              .attr({
-                x: width + 2,
-                y(d) {
-                  return y(d[d.length - 1].value);
-                }
-              })
-              .text(function(d) {
-                return Helpers.formatValue(d[d.length - 1].value) + '%';
-              });
+            dataLabels.each( function(d){
+              if ( d.length === 0 ) { 
+                d3.select( this ).transition()
+                  .duration( transitionDuration )
+                  .style( 'opacity', 0 );
+              } else { 
+                d3.select( this )
+                  .transition()
+                  .duration( transitionDuration )
+                  .attr({
+                    x:      width+2,
+                    y:      function(d) { return y( d[ d.length-1 ].value ); }
+                  })
+                  .text( function(d) { return Helpers.formatValue( d[ d.length-1 ].value ) + '%'; } )
+                  .style( 'opacity', 1 );
+              }
+            });
           } else {
-            xAxis.call(makeXAxis);
+            xAxis.attr('transform', 'translate(0,' + height + ')').call(makeXAxis);
             yAxis.call(makeYAxis);
             xGrid.call(makeXGrid().tickSize(height, 0, 0).tickFormat(''));
             yGrid.call(makeYGrid().tickSize(-width, 0, 0).tickFormat(''));
-            lines.attr('d', function(d) {
-              return line(d);
+            
+            lines.each( function(d){
+              if ( d.length === 0 ) { d3.select( this ).style( 'opacity', 0 );} 
+              else { d3.select( this ).attr( 'd', function(d) { return d.length === 0 ? null : line( d ); } ).style( 'opacity', 1 );}
             });
-            linesTransparent.attr('d', function(d) {
-              return line(d);
+
+            linesTransparent.attr( 'd', function(d) { return line( d ); } );
+            
+            dataLabels.each( function(d){
+              if ( d.length === 0 ) { 
+                d3.select( this ).style( 'opacity', 0 );
+              } else { 
+                d3.select( this )
+                  .attr({
+                    x:      width+2,
+                    y:      function(d) { return y( d[ d.length-1 ].value ); }
+                  })
+                  .text( function(d) { return Helpers.formatValue( d[ d.length-1 ].value ) + '%'; } )
+                  .style( 'opacity', 1 );
+              }
             });
-            dataLabels.attr({
-                x: width + 2,
-                y(d) {
-                  return y(d[d.length - 1].value);
-                }
-              })
-              .text(function(d) {
-                return Helpers.formatValue(d[d.length - 1].value) + '%';
-              });
           }
         }
 

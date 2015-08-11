@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import _ from 'underscore';
 
+// Renders
+import Dashboard from './Dashboard.render.js';
+
 // Component styles
 import 'style!./Styles/Shops.scss';
 let styles = require('./Styles/Shops.scss').locals.styles;
@@ -17,6 +20,12 @@ class Shops extends Component {
 }
 
 class CountriesList extends Component {
+  
+  selectCountry(country) {
+    Dashboard.applyFilter({ Orglevel1: country });
+    Dashboard.update(500);
+  }
+
   render() {
     const { countries } = this.props;
     return (
@@ -35,13 +44,20 @@ class CountriesList extends Component {
 }
 
 class CitiesList extends Component {
+  
+  selectCity(city) {
+    Dashboard.applyFilter({ Orglevel2: city });
+    Dashboard.update(500);
+  }
+
   render() {
     const { cities } = this.props;
     return (
       <div className='cities'>
         { cities.map((city) => {
           return (
-            <p className='city'>
+            <p className='city'
+              onClick={ () => this.selectCity(city) }>
               { city }
               <ShopsList { ...this.props } />
             </p>
@@ -53,13 +69,20 @@ class CitiesList extends Component {
 }
 
 class ShopsList extends Component {
+
+  selectShop(shop) {
+    Dashboard.applyFilter({ Orglevel3: shop });
+    Dashboard.update(500);
+  }
+
   render() {
     const { shops } = this.props;
     return (
       <div className='shops'>
         { shops.map((shop) => {
           return (
-            <p className='shop'>
+            <p className='shop'
+              onClick={ () => this.selectShop(shop) }>
               { shop }
             </p>
           );

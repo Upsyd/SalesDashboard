@@ -61,22 +61,15 @@ Dashboard = {
     Dashboard.widgets.push({
       type: "DataTable",
       name: "Orders",
-      obj: table,
+      obj:   table,
       selection: selection,
       rawData: data,
       preparedData: tableData,
-      title: function(title) {
-        this.obj.title(title);
-      },
+      title: function( title ) { this.obj.title( title ); },
       // data: function( data ) { this.rawData = data; this.preparedData = prepareData( this.rawData ); this.selection.datum( this.preparedData[0] ); this.obj.footer( preparedData[1] ); },
-      filter: function(filterObj) {
-        this.preparedData = prepareData(this.rawData);
-        this.selection.datum(this.preparedData[0]);
-        this.obj.footer(preparedData[1]);
-      },
-      update: function(transitionDuration) {
-        this.obj.update(transitionDuration);
-      }
+      // filter: function( filterObj ) {},
+      filter: function( filterObj ) { this.preparedData = prepareData( this.rawData, filterObj ); this.selection.datum( this.preparedData[0] ); this.obj.footer( this.preparedData[1] ); },
+      update: function( transitionDuration ) { this.obj.update( transitionDuration ); }
     });
 
     function prepareData(data, filterObj) {
@@ -170,22 +163,15 @@ Dashboard = {
     Dashboard.widgets.push({
       type: "DataTable",
       name: "AdditionalServices",
-      obj: table,
+      obj:   table,
       selection: selection,
       rawData: data,
       preparedData: tableData,
-      title: function(title) {
-        this.obj.title(title);
-      },
+      title: function( title ) { this.obj.title( title ); },
       // data: function( data ) { this.rawData = data; this.preparedData = prepareData( this.rawData ); this.selection.datum( this.preparedData[0] ); this.obj.footer( preparedData[1] ); },
-      filter: function(filterObj) {
-        this.preparedData = prepareData(this.rawData);
-        this.selection.datum(this.preparedData[0]);
-        this.obj.footer(preparedData[1]);
-      },
-      update: function(transitionDuration) {
-        this.obj.update(transitionDuration);
-      }
+      // filter: function( filterObj ) {},
+      filter: function( filterObj ) { this.preparedData = prepareData( this.rawData, filterObj ); this.selection.datum( this.preparedData[0] ); this.obj.footer( this.preparedData[1] ); },
+      update: function( transitionDuration ) { this.obj.update( transitionDuration ); }
     });
 
     function prepareData(data, filterObj) {
@@ -278,11 +264,12 @@ Dashboard = {
 
 Dashboard.createWidget("CSV/Orders.csv", Dashboard.ordersWidget);
 Dashboard.createWidget("CSV/AdditionalServices.csv", Dashboard.additionalServicesWidget);
-Dashboard.createWidget("CSV/CustomerScore.csv", Dashboard.performanceWidget);
+Dashboard.createWidget("CSV/CustomerScore.csv", performanceWidget.render );
 
 d3.select(window).on('resize', function() {
-  console.log(Dashboard.widgets)
   Dashboard.widgets.forEach(function(w) {
     w.update();
   });
 });
+
+module.exports = Dashboard;
