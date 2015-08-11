@@ -44,6 +44,9 @@ export default class RightSide extends Component {
         </div>
         */ }
         <div className='row'>
+          <h3 className='header'>
+            18 Week, 2015 Year
+          </h3>
           <div className='col-md-6 col-lg-6'>
             <OrdersTable className={ stylesWidget } />
             <AdditionalServices className={ stylesWidget } />

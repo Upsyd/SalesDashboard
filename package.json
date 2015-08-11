@@ -56,6 +56,7 @@
     "redux": "^1.0.0-rc",
     "redux-devtools": "^0.1.3",
     "reflux": "^0.2.8",
+    "reselect": "0.0.2",
     "style-loader": "^0.12.3",
     "underscore": "^1.8.3",
     "webpack": "^1.9.6",

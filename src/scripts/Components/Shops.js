@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+
+import { createSelector } from 'reselect';
+
 import _ from 'underscore';
 
 // Renders
@@ -27,7 +30,8 @@ class CountriesList extends Component {
   }
 
   render() {
-    const { countries } = this.props;
+    // const { countries } = this.props;
+    let countries = ['SWEDEN'];
     return (
       <div className='countries'>
         { countries.map((country) => {
@@ -49,9 +53,10 @@ class CitiesList extends Component {
   
   getCities() {
     const { data, currentCountry } = this.props;
-    return _.where(data.items, { Orglevel1: currentCountry }).map((shop) => {
+    
+    return _.uniq(data.items.map((shop) => {
       return shop.Orglevel2;
-    });
+    }));
   }
 
   selectCity(city) {
@@ -112,18 +117,22 @@ class ShopsList extends Component {
 
 function select(state) {
   function getCountries(data) {
-    let countries = [];
+    // let countries = [];
 
-    data.items.map((shop) => {
-      countries.push(shop.Orglevel1);
-    });
+    // data.items.map((shop) => {
+    //   countries.push(shop.Orglevel1);
+    // });
 
-    return _.uniq(countries);
+    // countries = _.uniq(countries);
+    // return countries.filter(function(e) {
+    //   return e.replace(/(\r\n|\n|\r)/gm, "")
+    // });
   };
 
   return {
     data: state.shops,
-    countries: getCountries(state.shops),
+    // countries: getCountries(state.shops),
+    // countries: ['a', 'b'],
   };
 }
 
