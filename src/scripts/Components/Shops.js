@@ -36,7 +36,7 @@ class CountriesList extends Component {
               <li onClick={ () => this.selectCountry(country) }>
                 { country }
               </li>
-              <CitiesList { ...this.props } />
+              <CitiesList { ...this.props } currentCountry={ country } />
             </ul>
           );
         })}
@@ -47,13 +47,20 @@ class CountriesList extends Component {
 
 class CitiesList extends Component {
   
+  getCities() {
+    const { data, currentCountry } = this.props;
+    return _.where(data.items, { Orglevel1: currentCountry }).map((shop) => {
+      return shop.Orglevel2;
+    });
+  }
+
   selectCity(city) {
     Dashboard.applyFilter({ Orglevel2: city });
     Dashboard.update(500);
   }
 
   render() {
-    const { cities } = this.props;
+    let cities = this.getCities();
     return (
       <div className='cities'>
         { cities.map((city) => {
@@ -75,7 +82,7 @@ class ShopsList extends Component {
 
   getShops() {
     const { data, currentCity } = this.props;
-    return _.where(data.items, {Orglevel2: currentCity}).map((shop) => {
+    return _.where(data.items, { Orglevel2: currentCity }).map((shop) => {
       return shop.Orglevel3;
     });
   }
@@ -114,38 +121,9 @@ function select(state) {
     return _.uniq(countries);
   };
 
-  function getCities(data) {
-    let cities = [];
-
-    data.items.map((shop) => {
-      cities.push(shop.Orglevel2);
-    });
-
-    return _.uniq(cities);
-  };
-
-  function getShop(data) {
-    let shops = [];
-
-    // console.log(data)
-    // console.log(_.where(data.items, {Orglevel2: 'STOCKHOLM'}));
-
-    data.items.map((shop) => {
-      // console.log(shop)
-      // console.log(_.where(shop, {Orglevel2: 'STOCKHOLM'}));
-      // shops.push(shop.Orglevel3);
-      // shops.push(_.where(shops, {Orglevel3: shop.Orglevel3}));
-    });
-
-    // return _.uniq(shops);
-    return shops;
-  };
-
   return {
     data: state.shops,
     countries: getCountries(state.shops),
-    cities: getCities(state.shops),
-    shops: getShop(state.shops),
   };
 }
 
