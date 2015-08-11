@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import _ from 'underscore';
 
 // Vendor styles
 import 'bootstrap-webpack';
@@ -21,6 +23,7 @@ import AdditionalServices from './Widgets/AdditionalServices/AdditionalServices.
 
 export default class RightSide extends Component {
   render() {
+    const { week } = this.props;
     return (
       <div className={ `${ styles }` }>
         { /* 
@@ -45,7 +48,7 @@ export default class RightSide extends Component {
         */ }
         <div className='row'>
           <h3 className='header'>
-            18 Week, 2015 Year
+            { week } Week, 2015 Year
           </h3>
           <div className='col-md-6 col-lg-6'>
             <OrdersTable className={ stylesWidget } />
@@ -59,3 +62,22 @@ export default class RightSide extends Component {
     );
   }
 }
+
+function select(state) {
+  function getWeeks(data) {
+    let weeks = [];
+
+    data.items.map((shop) => {
+      weeks.push(shop.Week);
+    });
+
+    return _.uniq(weeks);
+  }
+
+  return {
+    weeks: getWeeks(state.weeks),
+    week: state.weeks.week,
+  };
+}
+
+export default connect(select)(RightSide);

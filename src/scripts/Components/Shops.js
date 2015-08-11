@@ -52,8 +52,8 @@ class CountriesList extends Component {
 class CitiesList extends Component {
   
   getCities() {
-    const { data, currentCountry } = this.props;
-    
+    const { data } = this.props;
+
     return _.uniq(data.items.map((shop) => {
       return shop.Orglevel2;
     }));
@@ -116,23 +116,8 @@ class ShopsList extends Component {
 }
 
 function select(state) {
-  function getCountries(data) {
-    // let countries = [];
-
-    // data.items.map((shop) => {
-    //   countries.push(shop.Orglevel1);
-    // });
-
-    // countries = _.uniq(countries);
-    // return countries.filter(function(e) {
-    //   return e.replace(/(\r\n|\n|\r)/gm, "")
-    // });
-  };
-
   return {
     data: state.shops,
-    // countries: getCountries(state.shops),
-    // countries: ['a', 'b'],
   };
 }
 
