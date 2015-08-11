@@ -6,22 +6,27 @@
   font-size: 12px;
   line-height: 14px;
 
-  p {
-    padding: 4px 8px;
-    border-radius: 3px;
+  ul {
+    padding: 0;
+    margin-left: 10px;
 
-    cursor: pointer;
+    list-style-type: none;
 
     &::first-letter {
       text-transform: uppercase;
     }
 
-    &:hover {
-      background: rgba(0, 0, 0, .03);
-    }
+    li {
+      margin: 3px 0;
+      padding: 0;
 
-    &.active {
-      background: rgba(0, 0, 0, .05);
+      &:hover {
+        background: rgba(0, 0, 0, .03);
+      }
+
+      &.active {
+        background: rgba(0, 0, 0, .05);
+      }
     }
   }
 

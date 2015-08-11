@@ -4,7 +4,7 @@ import Helpers from '../Utils/helpers.js';
 let itemsData = [];
 
 $.ajax({
-  url: '../../../CSV/Orders.csv',
+  url: '../../../CSV/Org.csv',
   async: false,
   success: function(csv) {
     itemsData = JSON.parse(Helpers.CSV2JSON(csv, ';'));
@@ -18,5 +18,7 @@ let shops = {
 
   items: itemsData
 };
+
+console.log(shops)
 
 module.exports = shops;

@@ -32,10 +32,12 @@ class CountriesList extends Component {
       <div className='countries'>
         { countries.map((country) => {
           return (
-            <p className='country active'>
-              { country }
+            <ul className='country'>
+              <li onClick={ () => this.selectCountry(country) }>
+                { country }
+              </li>
               <CitiesList { ...this.props } />
-            </p>
+            </ul>
           );
         })}
       </div>
@@ -56,11 +58,12 @@ class CitiesList extends Component {
       <div className='cities'>
         { cities.map((city) => {
           return (
-            <p className='city'
-              onClick={ () => this.selectCity(city) }>
-              { city }
+            <ul className='city'>
+              <li onClick={ () => this.selectCity(city) }>
+                { city }
+              </li>
               <ShopsList { ...this.props } />
-            </p>
+            </ul>
           );
         })}
       </div>
@@ -81,10 +84,11 @@ class ShopsList extends Component {
       <div className='shops'>
         { shops.map((shop) => {
           return (
-            <p className='shop'
-              onClick={ () => this.selectShop(shop) }>
-              { shop }
-            </p>
+            <ul className='shop'>
+              <li onClick={ () => this.selectShop(shop) }>
+                { shop }
+              </li>
+            </ul>
           );
         })}
       </div>
@@ -114,6 +118,7 @@ function select(state) {
   };
 
   function getShop(data) {
+    console.log(data)
     let shops = [];
 
     data.items.map((shop) => {
