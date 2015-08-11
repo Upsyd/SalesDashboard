@@ -23,10 +23,10 @@ export default class ApplicationMenu extends Component {
             </div>
           </div>
           <div className="row">
-            <div className="col-md-3 col-lg-3">
+            <div className="col-md-2 col-lg-2">
               <LeftSide />
             </div>
-            <div className="col-md-9 col-lg-9">
+            <div className="col-md-10 col-lg-10">
               <RightSide />
             </div>
           </div>
