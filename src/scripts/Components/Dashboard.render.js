@@ -22,41 +22,27 @@ Dashboard = {
     // ssvParser(file, function(data) { console.log(data) });
   },
   ordersWidget: function(data) {
-    var tableData = prepareData(data);
+    var tableData = prepareData( data );
 
-    var rowsToHighlight = [{
-      name: '% of',
-      color: 'red',
-      criterion: highlightCriterion
-    }, {
-      name: '% of (PY)',
-      color: 'red',
-      criterion: highlightCriterion
-    }, {
-      name: 'Target',
-      color: 'orange',
-      criterion: function() {
-        return true;
-      }
-    }, {
-      name: 'Target (PY)',
-      color: 'orange',
-      criterion: function() {
-        return true;
-      }
-    }];
+    var rowsToHighlight = [
+      { name: '% of',        color: 'red', criterion: highlightCriterion },
+      { name: '% of (prev y.)',   color: 'red', criterion: highlightCriterion },
+      { name: 'Target',      color: 'orange', criterion: function() { return true; } },
+      { name: 'Target (prev y.)', color: 'orange', criterion: function() { return true; } }
+    ];
 
-    var cellWidths = {
-      'Product': '20%',
-      'Orders': '16%',
-      '% of': '16%',
-      'Target': '16%',
-      '% of (PY)': '16%',
-      'Target (PY)': '16%'
+    var cellWidths = { 
+      'Product'     : '20%',
+      'Orders'      : '16%',
+      '% of'        : '16%',
+      'Target'      : '16%',
+      '% of (prev y.)'   : '16%',
+      'Target (prev y.)' : '16%' 
     };
 
     var selection = d3.select('#Orders');
-    var table = ordersWidget.tableChart().title('Orders').footer(tableData[1]).tdWidths(cellWidths).highlightRows(rowsToHighlight)(selection.datum(tableData[0]));
+    var table = ordersWidget.tableChart().title('Orders').footer(tableData[1]).tdWidths( cellWidths ).highlightRows( rowsToHighlight )( selection.datum( tableData[0] ) );
+
 
     Dashboard.widgets.push({
       type: "DataTable",
@@ -72,38 +58,32 @@ Dashboard = {
       update: function( transitionDuration ) { this.obj.update( transitionDuration ); }
     });
 
-    function prepareData(data, filterObj) {
+    function prepareData( data, filterObj ) {
       var filterObj = filterObj ? filterObj : {};
-      var dataFiltered = Helpers.filterData(data, filterObj);
-      calcAdditionalOrdersData(dataFiltered, data); // For previous Year
-
-      var dataGrouped = _.groupBy(dataFiltered, 'Product');
-
+      var dataFiltered = Helpers.filterData( data, filterObj );
+      calcAdditionalOrdersData( dataFiltered, data ); // For previous Year
+      
+      var dataGrouped  =  _.groupBy( dataFiltered, 'Product' );
+      
       var dataReduced = [];
-      for (var key in dataGrouped) {
+      for ( var key in  dataGrouped ) {
         dataReduced.push({
-          'Product': key,
-          'Ordersnum': d3.sum(dataGrouped[key], function(d) {
-            return Helpers.isNumber(d.Ordersnum) ? d.Ordersnum : 0;
-          }),
-          'Orderstargetnum': d3.sum(dataGrouped[key], function(d) {
-            return Helpers.isNumber(d.Orderstargetnum) ? d.Orderstargetnum : 0;
-          }),
-          'Orderstargetnumprev': d3.sum(dataGrouped[key], function(d) {
-            return Helpers.isNumber(d.Orderstargetnumprev) ? d.Orderstargetnumprev : 0;
-          }),
+          'Product'          : key,
+          'Ordersnum'        : d3.sum( dataGrouped[key], function(d) { return Helpers.isNumber(d.Ordersnum) ? d.Ordersnum : 0; } ),
+          'Orderstargetnum'  : d3.sum( dataGrouped[key], function(d) { return Helpers.isNumber(d.Orderstargetnum) ? d.Orderstargetnum : 0; } ),
+          'Orderstargetnumprev'  : d3.sum( dataGrouped[key], function(d) { return Helpers.isNumber(d.Orderstargetnumprev) ? d.Orderstargetnumprev : 0; } ),
         });
       }
 
-      var bodyData = _.map(dataReduced, function(d) {
-        return {
+      var bodyData = _.map( dataReduced, function(d) { 
+        return  {
           // 'Location': d.Orglevel1 + ' ' + d.Orglevel2 + ' ' + d.Orglevel3,
-          'Product': d.Product,
-          'Orders': +d.Ordersnum,
-          '% of': Helpers.isNumber(+d.Ordersnum / d.Orderstargetnum) ?Helpers.formatValue(+d.Ordersnum / d.Orderstargetnum * 100) + '%' : '',
-          'Target': +d.Orderstargetnum,
-          '% of (PY)': Helpers.isNumber(+d.Ordersnum / d.Orderstargetnumprev) ?Helpers.formatValue(+d.Ordersnum / d.Orderstargetnumprev * 100) + '%' : '',
-          'Target (PY)': Helpers.isNumber(d.Orderstargetnumprev) ? +d.Orderstargetnumprev : ''
+          'Product'    :  d.Product,
+          'Orders'     : +d.Ordersnum,
+          '% of'       :  Helpers.isNumber( +d.Ordersnum / d.Orderstargetnum ) ? Helpers.formatValue(+d.Ordersnum / d.Orderstargetnum * 100) + '%' : '',
+          'Target'     : +d.Orderstargetnum,
+          '% of (prev y.)'  :  Helpers.isNumber( +d.Ordersnum / d.Orderstargetnumprev ) ? Helpers.formatValue(+d.Ordersnum / d.Orderstargetnumprev * 100) + '%' : '',
+          'Target (prev y.)':  Helpers.isNumber( d.Orderstargetnumprev ) && (d.Orderstargetnumprev !== 0) ? +d.Orderstargetnumprev : ''
         }
       });
 
@@ -115,19 +95,16 @@ Dashboard = {
         '% of (PY)': null,
         'Target (PY)': null
       };
-      footerData['Orders'] = d3.sum(dataReduced, function(d) {
-        return +d.Ordersnum;
-      });
-      footerData['Target'] = d3.sum(dataReduced, function(d) {
-        return +d.Orderstargetnum;
-      });
-      footerData['Target (PY)'] = d3.sum(dataReduced, function(d) {
-        return +d.Orderstargetnumprev;
-      });
-      footerData['% of'] = Helpers.isNumber(footerData['Orders'] / footerData['Target']) ?Helpers.formatValue(footerData['Orders'] / footerData['Target'] * 100) + '%' : '';
-      footerData['% of (PY)'] = Helpers.isNumber(footerData['Orders'] / footerData['Target (PY)']) ?Helpers.formatValue(footerData['Orders'] / footerData['Target (PY)'] * 100) + '%' : '';
+      var ordersTotal   = d3.sum( dataReduced, function(d) { return d.Ordersnum; } ),
+        targetTotal   = d3.sum( dataReduced, function(d) { return d.Orderstargetnum; } ),
+        targetTotalPY = d3.sum( dataReduced, function(d) { return d.Orderstargetnumprev; } );
+      footerData['Orders']      = ordersTotal === 0 ? '' : ordersTotal;
+      footerData['Target']      = targetTotal === 0 ? '' : targetTotal;
+      footerData['Target (PY)'] = targetTotalPY === 0 ? '' : targetTotalPY;
+      footerData['% of']        = Helpers.isNumber( ordersTotal / targetTotal ) ? Helpers.formatValue( ordersTotal / targetTotal * 100 ) + '%' : '';
+      footerData['% of (PY)']   = Helpers.isNumber( ordersTotal / targetTotalPY ) ? Helpers.formatValue( ordersTotal / targetTotalPY * 100 ) + '%' : '';
 
-      return [bodyData, footerData];
+      return [ bodyData, footerData ];
 
     }
 

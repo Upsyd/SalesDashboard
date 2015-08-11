@@ -390,6 +390,10 @@ export default class performanceWidget {
           x.range([0, width]);
           y.range([height, 0]);
 
+          lines.data( data );
+          linesTransparent.data( data );
+          dataLabels.data( data );
+
           if ( xMin && xMax ) {
             x.domain( [ xMin, xMax ] );
           }
