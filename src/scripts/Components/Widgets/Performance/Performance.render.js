@@ -1,4 +1,5 @@
 import _ from 'underscore';
+import Dashboard from '../../Dashboard.js';
 import Helpers from '../../../Utils/helpers.js';
 
 export default class performanceWidget {

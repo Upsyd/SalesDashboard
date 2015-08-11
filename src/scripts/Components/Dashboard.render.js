@@ -4,7 +4,7 @@ import Helpers from '../Utils/helpers.js';
 import performanceWidget from './Widgets/Performance/Performance.render.js';
 import ordersWidget from './Widgets/OrdersTable/OrdersTable.render.js';
 
-var Dashboard = {
+Dashboard = {
   widgets: [],
   applyFilter: function(filterObj) {
     this.widgets.forEach(function(w) {
@@ -274,92 +274,6 @@ var Dashboard = {
       return [bodyData, footerData];
     }
   },
-  performanceWidget: function(data) {
-    var chartData = prepareData(data);
-
-    var colorMap = {
-      "Measure1": "red",
-      "Measure2": "blue",
-      "Target": "orange"
-    };
-
-    var selection = d3.select('#Performance');
-    var chart = performanceWidget.lineChart().title('Performance').palette(colorMap)(selection.datum(chartData));
-
-    Dashboard.widgets.push({
-      type: "LineChart",
-      name: "Performance",
-      obj: chart,
-      selection: selection,
-      rawData: data,
-      preparedData: chartData,
-      title: function(title) {
-        this.obj.title(title);
-      },
-      // data: function( data ) { this.rawData = data; this.preparedData = prepareData( this.rawData ); this.selection.datum( this.preparedData ); },
-      filter: function(filterObj) {
-        this.preparedData = prepareData(this.rawData);
-        this.selection.datum(this.preparedData);
-      },
-      update: function(transitionDuration) {
-        this.obj.update(transitionDuration);
-      }
-    });
-
-    function prepareData(data, filterObj) {
-      var filterObj = filterObj ? filterObj : {};
-      var dataFiltered = Helpers.filterData(data, filterObj);
-
-      // Parse Date
-      var format = d3.time.format('%Y-%m-%d');
-      dataFiltered.forEach(function(d) {
-        d.Date = format.parse(d.Date);
-        d.Measure1 = parseFloat(d.Measure1);
-        d.Measure2 = parseFloat(d.Measure2);
-        d.Target = parseFloat(d.Target);
-      });
-
-      // Date Filter
-      dataFiltered = _.filter(dataFiltered, function(d) {
-        return d.Date > format.parse('2015-04-30') - 90 * 86400000;
-      });
-
-      var dataGrouped = _.groupBy(dataFiltered, 'Date');
-      // console.log( "Data Grouped:", dataGrouped );
-
-      var dataReduced = [];
-      for (var key in dataGrouped) {
-        dataReduced.push({
-          'Date': new Date(key),
-          'Measure1': d3.mean(dataGrouped[key], function(d) {
-            return Helpers.isNumber(d.Measure1) ? d.Measure1 : 0;
-          }),
-          'Measure2': d3.mean(dataGrouped[key], function(d) {
-            return Helpers.isNumber(d.Measure2) ? d.Measure2 : 0;
-          }),
-          'Target': d3.mean(dataGrouped[key], function(d) {
-            return Helpers.isNumber(d.Target) ? d.Target : 0;
-          })
-        });
-      }
-      // console.log( "Data Reduced:", dataReduced );
-
-      var chartData = _.reduce(dataReduced, function(memo, item) {
-        var measure1Arr = _.chain(memo[0]).push(Helpers.renameProperty(_.pick(item, ['Date', 'Measure1']), 'Measure1', 'value')).value();
-        var measure2Arr = _.chain(memo[1]).push(Helpers.renameProperty(_.pick(item, ['Date', 'Measure2']), 'Measure2', 'value')).value();
-        var targetArr = _.chain(memo[2]).push(Helpers.renameProperty(_.pick(item, ['Date', 'Target']), 'Target', 'value')).value();
-
-        return [measure1Arr, measure2Arr, targetArr];
-      }, [
-        [],
-        [],
-        []
-      ]);
-      // console.log( "Chart Data:",  chartData );
-
-      return chartData;
-    }
-  }
 }
 
 Dashboard.createWidget("CSV/Orders.csv", Dashboard.ordersWidget);
@@ -367,6 +281,7 @@ Dashboard.createWidget("CSV/AdditionalServices.csv", Dashboard.additionalService
 Dashboard.createWidget("CSV/CustomerScore.csv", Dashboard.performanceWidget);
 
 d3.select(window).on('resize', function() {
+  console.log(Dashboard.widgets)
   Dashboard.widgets.forEach(function(w) {
     w.update();
   });
