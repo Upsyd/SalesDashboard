@@ -62,7 +62,7 @@ class CitiesList extends Component {
               <li onClick={ () => this.selectCity(city) }>
                 { city }
               </li>
-              <ShopsList { ...this.props } />
+              <ShopsList { ...this.props } currentCity={ city } />
             </ul>
           );
         })}
@@ -73,13 +73,20 @@ class CitiesList extends Component {
 
 class ShopsList extends Component {
 
+  getShops() {
+    const { data, currentCity } = this.props;
+    return _.where(data.items, {Orglevel2: currentCity}).map((shop) => {
+      return shop.Orglevel3;
+    });
+  }
+
   selectShop(shop) {
     Dashboard.applyFilter({ Orglevel3: shop });
     Dashboard.update(500);
   }
 
   render() {
-    const { shops } = this.props;
+    let shops = this.getShops();
     return (
       <div className='shops'>
         { shops.map((shop) => {
@@ -118,18 +125,24 @@ function select(state) {
   };
 
   function getShop(data) {
-    console.log(data)
     let shops = [];
 
+    // console.log(data)
+    // console.log(_.where(data.items, {Orglevel2: 'STOCKHOLM'}));
+
     data.items.map((shop) => {
-      shops.push(shop.Orglevel3);
+      // console.log(shop)
+      // console.log(_.where(shop, {Orglevel2: 'STOCKHOLM'}));
+      // shops.push(shop.Orglevel3);
+      // shops.push(_.where(shops, {Orglevel3: shop.Orglevel3}));
     });
 
-    return _.uniq(shops);
+    // return _.uniq(shops);
+    return shops;
   };
 
   return {
-    // shops: state.shops,
+    data: state.shops,
     countries: getCountries(state.shops),
     cities: getCities(state.shops),
     shops: getShop(state.shops),

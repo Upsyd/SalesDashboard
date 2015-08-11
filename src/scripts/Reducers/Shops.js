@@ -19,6 +19,4 @@ let shops = {
   items: itemsData
 };
 
-console.log(shops)
-
 module.exports = shops;
