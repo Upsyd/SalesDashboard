@@ -6,7 +6,7 @@ import 'style!./../Components/Styles/Application.scss';
 let applicationStyles = require('./../Components/Styles/Application.scss').locals.styles;
 
 export default class App extends Component {
-  render() {  
+  render() {
     return (
       <div className = { `${ applicationStyles }` }>
         <DashboardApp />
