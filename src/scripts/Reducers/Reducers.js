@@ -1,6 +1,25 @@
-import { SETSHOPS } from '../Actions/Actions';
+import { SETSHOPS, WEEKINCREASE, WEEKDECREASE, GETAPPLICATIONSETTINGS } from '../Actions/Actions';
+
+// Data
+import applicationData from './Application.js';
 import shopsData from './Shops.js';
 import weeksData from './Weeks.js';
+
+/**
+ * Application
+ */
+export function application(state = applicationData, action) {
+  let newState = {...state};
+
+  switch (action.type) {
+
+    case 'GETAPPLICATIONSETTINGS':
+      return newState;
+
+    default:
+      return newState;
+    }
+}
 
 /**
  * Shops
@@ -9,12 +28,14 @@ export function shops(state = shopsData, action) {
   let newState = {...state};
 
   switch (action.type) {
-  case 'SETSHOPS':
-    newState.push(action.shop);
-    return newState;
-  default:
-    return newState;
-  }
+
+    case 'SETSHOPS':
+      newState.push(action.shop);
+      return newState;
+
+    default:
+      return newState;
+    }
 }
 
 /**
@@ -24,13 +45,16 @@ export function weeks(state = weeksData, action) {
   let newState = {...state};
 
   switch (action.type) {
-  case 'WEEKINCREASE':
-    newState.week++;
-    return newState;
-  case 'WEEKDECREASE':
-    newState.week--;
-    return newState;
-  default:
-    return state;
-  }
+
+    case 'WEEKINCREASE':
+      newState.week++;
+      return newState;
+
+    case 'WEEKDECREASE':
+      newState.week--;
+      return newState;
+
+    default:
+      return state;
+    }
 }

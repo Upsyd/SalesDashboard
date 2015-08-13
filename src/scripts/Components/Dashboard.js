@@ -1,4 +1,7 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+
+import { getApplicationData } from '../Actions/Actions.js';
 
 // Vendor styles
 import 'bootstrap-webpack';
@@ -29,3 +32,12 @@ export default class ApplicationMenu extends Component {
     );
   }
 }
+
+function select(state) {
+  return {
+    // weeks: getWeeks(state.weeks),
+    data: state.application,
+  };
+}
+
+export default connect(select)(ApplicationMenu);

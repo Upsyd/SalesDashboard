@@ -2,6 +2,12 @@
  * action types
  */
 
+export function getApplicationSettings() {
+  return {
+    type: 'GETAPPLICATIONSETTINGS',
+  };
+}
+
 export function setShops(shop) {
   return {
     type: 'SETSHOPS',
