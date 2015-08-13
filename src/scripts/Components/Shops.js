@@ -4,6 +4,10 @@ import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
 import _ from 'underscore';
+import $ from 'jquery';
+
+// Actions
+import { getApplicationData, setApplicationSettings } from '../Actions/Actions.js';
 
 // Renders
 import Dashboard from './Dashboard.render.js';
@@ -25,19 +29,24 @@ class Shops extends Component {
 class CountriesList extends Component {
   
   selectCountry(country) {
+    const { dispatch } = this.props;
+    dispatch(setApplicationSettings(null, null, country));
+
     Dashboard.applyFilter({ Orglevel1: country });
     Dashboard.update(500);
   }
 
   render() {
-    // const { countries } = this.props;
-    let countries = ['SWEDEN'];
+    const { currentCountry } = this.props;
+    let countries = ['SWEDEN'],
+        active;
     return (
       <div className='countries'>
         { countries.map((country) => {
+          { active = country === currentCountry ? 'active' : ''; }
           return (
             <ul className='country'>
-              <li onClick={ () => this.selectCountry(country) }>
+              <li className={ active } onClick={ () => this.selectCountry(country) }>
                 { country }
               </li>
               <CitiesList { ...this.props } currentCountry={ country } />
@@ -60,18 +69,25 @@ class CitiesList extends Component {
   }
 
   selectCity(city) {
+    const { dispatch } = this.props;
+    dispatch(setApplicationSettings(null, city));
+
     Dashboard.applyFilter({ Orglevel2: city });
     Dashboard.update(500);
   }
 
   render() {
-    let cities = this.getCities();
+    const { currentCity } = this.props;
+    let cities = this.getCities(),
+        active;
     return (
       <div className='cities'>
         { cities.map((city) => {
+          { active = city === currentCity ? 'active' : ''; }
           return (
             <ul className='city'>
-              <li onClick={ () => this.selectCity(city) }>
+              <li className={ active }
+                  onClick={ () => this.selectCity(city) }>
                 { city }
               </li>
               <ShopsList { ...this.props } currentCity={ city } />
@@ -92,19 +108,27 @@ class ShopsList extends Component {
     });
   }
 
-  selectShop(shop) {
+  selectShop(shop, event) {
+    const { dispatch } = this.props;
+    dispatch(setApplicationSettings(shop));
+
     Dashboard.applyFilter({ Orglevel3: shop });
     Dashboard.update(500);
   }
 
   render() {
-    let shops = this.getShops();
+    const { currentShop } = this.props;
+    let shops = this.getShops(),
+        active = '';
     return (
       <div className='shops'>
         { shops.map((shop) => {
+          { active = shop === currentShop ? 'active' : ''; }
           return (
             <ul className='shop'>
-              <li onClick={ () => this.selectShop(shop) }>
+              
+              <li className={ active }
+                  onClick={ () => this.selectShop(shop, this) }>
                 { shop }
               </li>
             </ul>
@@ -116,8 +140,12 @@ class ShopsList extends Component {
 }
 
 function select(state) {
+  // console.log(state.application)
   return {
     data: state.shops,
+    currentShop: state.application.currentShop,
+    currentCity: state.application.currentCity,
+    currentCountry: state.application.currentCountry,
   };
 }
 

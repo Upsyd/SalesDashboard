@@ -8,10 +8,26 @@ export function getApplicationSettings() {
   };
 }
 
+export function setApplicationSettings(shop, city, country) {
+  return {
+    type: 'SETAPPLICATIONSETTINGS',
+    shop,
+    city,
+    country
+  };
+}
+
 export function setShops(shop) {
   return {
     type: 'SETSHOPS',
     shop
+  };
+}
+
+export function getShops(shops) {
+  return {
+    type: 'GETSHOPS',
+    shops
   };
 }
 

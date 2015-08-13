@@ -1,4 +1,4 @@
-import { SETSHOPS, WEEKINCREASE, WEEKDECREASE, GETAPPLICATIONSETTINGS } from '../Actions/Actions';
+import { SETSHOPS, GETSHOPS, WEEKINCREASE, WEEKDECREASE, GETAPPLICATIONSETTINGS } from '../Actions/Actions';
 
 // Data
 import applicationData from './Application.js';
@@ -14,6 +14,12 @@ export function application(state = applicationData, action) {
   switch (action.type) {
 
     case 'GETAPPLICATIONSETTINGS':
+      return newState;
+
+    case 'SETAPPLICATIONSETTINGS':
+      newState.currentShop = action.shop;
+      newState.currentCity = action.city;
+      newState.currentCountry = action.country;
       return newState;
 
     default:
