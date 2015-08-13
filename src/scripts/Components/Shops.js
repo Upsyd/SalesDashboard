@@ -140,7 +140,6 @@ class ShopsList extends Component {
 }
 
 function select(state) {
-  // console.log(state.application)
   return {
     data: state.shops,
     currentShop: state.application.currentShop,

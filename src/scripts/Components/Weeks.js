@@ -17,6 +17,8 @@ class Weeks extends Component {
     if (week < max) {
       dispatch(weekIncrease());
     }
+
+    this.update();
   }
 
   decrease() {
@@ -26,6 +28,20 @@ class Weeks extends Component {
     if (week > min) {
       dispatch(weekDecrease());
     }
+
+    this.update();
+  }
+
+  update() {
+    const { data } = this.props;
+
+    let currentCountry = data.currentCountry,
+        currentCity = data.currentCity,
+        currentShop = data.currentShop;
+
+    console.log('currentCountry ' + currentCountry);
+    console.log('currentCity ' + currentCity);
+    console.log('currentShop ' + currentShop);
   }
 
   render() {
@@ -61,6 +77,7 @@ function select(state) {
   return {
     weeks: getWeeks(state.weeks),
     week: state.weeks.week,
+    data: state.application,
   };
 }
 

@@ -14,6 +14,10 @@ $.ajax({
 
 let shops = {
   week: 17,
+
+  // Default
+  currentCountry: '',
+  currentCity: '',
   currentShop: 'STORE1',
 
   items: itemsData
