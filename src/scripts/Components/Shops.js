@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
 import _ from 'underscore';
-import $ from 'jquery';
 
 // Actions
 import { getApplicationData, setApplicationSettings } from '../Actions/Actions.js';
