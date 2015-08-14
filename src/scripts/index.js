@@ -6,7 +6,6 @@ import * as reducers from './Reducers/Reducers';
 
 import { createStore, renderDevTools } from './store_enhancers/devTools';
 
-let Dashboard;
 let reducersApp = combineReducers(reducers);
 let store = createStore(reducersApp);
 
