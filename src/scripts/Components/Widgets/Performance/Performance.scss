@@ -1,3 +1,13 @@
+@import '../../Styles/mixins.scss';
+
 :local(.styles) {
   position: relative;
+  
+  @media (#{$desktop}) {
+    height: 485px;
+  }
+
+  @media (#{$large-desktop}) {
+    height: 385px;
+  }
 }

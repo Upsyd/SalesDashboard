@@ -57,15 +57,15 @@ class Weeks extends Component {
     const { week } = this.props;
     return (
       <div className={ `${ styles } row` }>
-        <div className='col-md-12'>
+        <div className='col-md-12 col-lg-12'>
           <h4>Weeks</h4>
         </div>
-        <div className='decrease col-md-2'
+        <div className='decrease'
           onClick={ () => this.decrease() }>-</div>
-        <div className='currentWeek col-md-2'>
+        <div className='currentWeek'>
           { week }
         </div>
-        <div className='increase col-md-2'
+        <div className='increase'
           onClick={ () => this.increase() }>+</div>
       </div>
     );

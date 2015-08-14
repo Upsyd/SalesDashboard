@@ -1,6 +1,18 @@
+@import 'mixins.scss';
+
 :local(.styles) {
   background: rgba(0, 0, 0, .03);
   padding: 10px;
   border-radius: 5px;
   border: 1px solid rgba(0, 0, 0, .05);
+  
+  margin-top: 35px;
+
+  // @media (#{$desktop}) {
+  //   height: 519px;
+  // }
+
+  // @media (#{$large-desktop}) {
+  //   height: 419px;
+  // }
 }
