@@ -143,8 +143,7 @@ function select(state) {
     week: state.weeks.week,
     currentShop: state.application.currentShop,
     currentCity: state.application.currentCity,
-    currentCountry: state.application.currentCountry,
-    week: state.weeks.week,
+    currentCountry: state.application.currentCountry
   };
 }
 

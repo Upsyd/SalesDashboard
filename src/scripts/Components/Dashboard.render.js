@@ -21,12 +21,15 @@ Dashboard = {
     // D3.js parser - slow
     // var ssvParser = d3.dsv(";", "text/plain");
     // ssvParser(file, widgetFunction);
+    var start = performance.now();
     Papa.parse(file, {
       header: true,
       download: true,
       skipEmptyLines: true,
       dynamicTyping: true,
       complete: function(results) {
+        var end = performance.now();
+        console.log( file, '. Parsing done in: ', end-start, ' ms' );
         widgetFunction( results.data, filterObj );
       },
       error: function(err) {
@@ -76,12 +79,10 @@ Dashboard = {
       var filterObj = filterObj ? filterObj : {};
       var dataFiltered = Helpers.filterData( data, filterObj );
 
-      console.log( filterObj.Year );
       var newFilterObj = {};
       Object.assign( newFilterObj, filterObj );
       newFilterObj.Year--;
       var dataFilteredPY = Helpers.filterData( data, newFilterObj );
-      console.log( dataFilteredPY, newFilterObj );
 
       // dataFiltered.forEach( function(d){
       //   d.Year            = +d.Year;
@@ -167,13 +168,13 @@ Dashboard = {
     var tableData = prepareData(data);
     
     var cellWidths = { 
-      'Product': '28%',
-      'A %': '12%',
-      'B %': '12%',
-      'C %': '12%',
-      'D %': '12%',
-      'E %': '12%',
-      'F %': '12%'
+      'Product': '22%',
+      'A %': '13%',
+      'B %': '13%',
+      'C %': '13%',
+      'D %': '13%',
+      'E %': '13%',
+      'F %': '13%'
     };
 
     var selection = d3.select('#AdditionalServices');

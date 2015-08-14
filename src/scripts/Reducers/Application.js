@@ -4,7 +4,7 @@ import Helpers from '../Utils/helpers.js';
 let itemsData = [];
 
 $.ajax({
-  url: '../../../CSV/Org.csv',
+  url: 'CSV/Org.csv',
   async: false,
   success: function(csv) {
     itemsData = JSON.parse(Helpers.CSV2JSON(csv, ';'));
@@ -16,9 +16,9 @@ let shops = {
   week: 17,
 
   // Default
-  currentCountry: '',
+  currentCountry: 'SWEDEN',
   currentCity: '',
-  currentShop: 'STORE1',
+  currentShop: '',
 
   items: itemsData
 };
