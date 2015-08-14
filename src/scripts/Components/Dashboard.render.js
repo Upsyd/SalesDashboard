@@ -26,7 +26,7 @@ Dashboard = {
       header: true,
       download: true,
       skipEmptyLines: true,
-      // dynamicTyping: true,
+      dynamicTyping: true,
       complete: function(results) {
         console.log( "Complete parsing")
         widgetFunction( results.data, filterObj );
@@ -265,7 +265,7 @@ Dashboard = {
   },
 }
 
-Dashboard.createWidget("CSV/Orders.csv", Dashboard.ordersWidget, {Year: 2015, Week: 18} );
+Dashboard.createWidget("CSV/OrdersPrevYear.csv", Dashboard.ordersWidget, {Year: 2015, Week: 18} );
 Dashboard.createWidget("CSV/AdditionalServices.csv", Dashboard.additionalServicesWidget, {Year: 2015, Week: 18});
 Dashboard.createWidget("CSV/CustomerScore.csv", performanceWidget.render, {Year: 2015, Week: 18} );
 

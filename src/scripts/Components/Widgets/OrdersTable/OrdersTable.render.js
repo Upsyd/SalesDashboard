@@ -29,6 +29,7 @@ export default class ordersWidget {
             .text(title);
         }
 
+
         var table = sel.append('table')
           .attr('cellspacing', '0px')
           .attr('cellpadding', '0px');
@@ -62,9 +63,21 @@ export default class ordersWidget {
               // updateBody( transitionDuration );
           // }
           // else {
+
               table.selectAll("tr, thead, tfoot").remove();
-              createBody();
-              if ( footer ) { createFooter(); }
+              sel.selectAll('.data.title').remove();
+              if ( data.length === 0 ) {
+                sel.append('div')
+                  .attr('class', 'data title')
+                  .style( 'font-weight', 300 )
+                  .style( 'font-size', 14 )
+                  .style( 'padding-bottom', 0 )
+                  .text('No Data');
+              } else {
+                createBody();
+                if ( footer ) { createFooter(); }
+              }
+              
           // }
         }
 
