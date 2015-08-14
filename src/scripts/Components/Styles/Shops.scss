@@ -6,6 +6,10 @@
   font-size: 12px;
   line-height: 14px;
 
+  border-top: 1px solid #CCC;
+  padding-top: 10px;
+  
+
   ul {
     padding: 0;
     margin-left: 10px;
@@ -17,8 +21,12 @@
     }
 
     li {
-      margin: 7px 0;
-      padding: 0;
+      margin: 3px 0;
+      padding: 7px 7px;
+
+      border-radius: 3px;
+
+      cursor: pointer;
 
       &:hover {
         background: rgba(0, 0, 0, .03);
