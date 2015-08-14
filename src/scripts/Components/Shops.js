@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import { createSelector } from 'reselect';
-
 import _ from 'underscore';
 
 // Actions
