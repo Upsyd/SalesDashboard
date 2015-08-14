@@ -3,7 +3,7 @@ import Helpers from '../../../Utils/helpers.js';
 
 export default class performanceWidget {
 
-  static render(data) {
+  static render(data, filterObj) {
     // Parse Date
     var format = d3.time.format('%Y-%m-%d'); 
     data.forEach( function(d){
@@ -13,7 +13,7 @@ export default class performanceWidget {
       d.Target   = parseFloat( d.Target );
     });
 
-    var chartData = prepareData( data );
+    var chartData = prepareData( data, filterObj );
 
     var colorMap = {
       "Measure1": "red",
@@ -40,12 +40,27 @@ export default class performanceWidget {
 
     function prepareData( data, filterObj ) {
       var filterObj = filterObj ? filterObj : {};
+      var year, week;
+      if ( filterObj.hasOwnProperty('Year') ){
+        year = +filterObj.Year;
+        delete filterObj.Year;
+      }
+      if ( filterObj.hasOwnProperty('Week') ){
+        week = +filterObj.Week;
+        delete filterObj.Week;
+      }
+
       var dataFiltered = Helpers.filterData( data, filterObj );
+
+      var formatYW = d3.time.format('%Y-%W-%w'); 
+      var date = ( year && week )? formatYW.parse(year + '-' + (week+1) + '-0' ) : new Date();
+
+      // console.log( year, week );
       // Date Filter
       dataFiltered = _.filter( dataFiltered, function(d) { 
-        return d.Date > format.parse('2015-04-30') - 90 * 86400000;
+        return (d.Date > date - 90 * 86400000) && ( d.Date < date );
       });
-
+      if ( !dataFiltered ) return;
       var dataGrouped  =  _.groupBy( dataFiltered, 'Date' );
       // console.log( "Data Grouped:", dataGrouped );
 
@@ -164,7 +179,7 @@ export default class performanceWidget {
           return colorMap && k in colorMap ? colorMap[k] : colors(k);
         };
 
-        let makeXAxis = d3.svg.axis().scale(x).orient('bottom').ticks(5),
+        let makeXAxis = d3.svg.axis().scale(x).orient('bottom').ticks(4),
           makeYAxis = d3.svg.axis().scale(y).tickFormat(function(d) {
             return d + '%';
           }).orient('left').ticks(5);

@@ -32,7 +32,8 @@ class CountriesList extends Component {
     const { dispatch } = this.props;
     dispatch(setApplicationSettings(null, null, country));
 
-    Dashboard.applyFilter({ Orglevel1: country });
+    var week = this.props.data.week;
+    Dashboard.applyFilter({ Orglevel1: country, Year: 2015, Week: week });
     Dashboard.update(500);
   }
 
@@ -72,7 +73,8 @@ class CitiesList extends Component {
     const { dispatch } = this.props;
     dispatch(setApplicationSettings(null, city));
 
-    Dashboard.applyFilter({ Orglevel2: city });
+    var week = this.props.data.week;
+    Dashboard.applyFilter({ Orglevel2: city, Year: 2015, Week: week });
     Dashboard.update(500);
   }
 
@@ -112,7 +114,8 @@ class ShopsList extends Component {
     const { dispatch } = this.props;
     dispatch(setApplicationSettings(shop));
 
-    Dashboard.applyFilter({ Orglevel3: shop });
+    var week = this.props.data.week;
+    Dashboard.applyFilter({ Orglevel3: shop, Year: 2015, Week: week });
     Dashboard.update(500);
   }
 

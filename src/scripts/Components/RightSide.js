@@ -44,18 +44,18 @@ export default class RightSide extends Component {
 }
 
 function select(state) {
-  function getWeeks(data) {
-    let weeks = [];
+  // function getWeeks(data) {
+  //   let weeks = [];
 
-    data.items.map((shop) => {
-      weeks.push(shop.Week);
-    });
+  //   data.items.map((shop) => {
+  //     weeks.push(shop.Week);
+  //   });
 
-    return _.uniq(weeks);
-  }
+  //   return _.uniq(weeks);
+  // }
 
   return {
-    weeks: getWeeks(state.weeks),
+    // weeks: getWeeks(state.weeks),
     week: state.weeks.week,
   };
 }

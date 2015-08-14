@@ -14,34 +14,43 @@ class Weeks extends Component {
     const { week, weeks, dispatch } = this.props;
     let max = weeks[weeks.length - 1];
     
-    if (week < max) {
+    // if (week < max) {
       dispatch(weekIncrease());
-    }
-
-    this.update();
+    // }
+    this.update( week+1 > 53 ? 1 : week+1);
   }
 
   decrease() {
     const { week, weeks, dispatch } = this.props;
     let min = weeks[0];
 
-    if (week > min) {
+    // if (week > min) {
       dispatch(weekDecrease());
-    }
-
-    this.update();
+    // }
+    this.update( week-1 < 1 ? 53 : week-1 );
   }
 
-  update() {
+  update( week ) {
     const { data } = this.props;
-
     let currentCountry = data.currentCountry,
         currentCity = data.currentCity,
         currentShop = data.currentShop;
 
-    console.log('currentCountry ' + currentCountry);
-    console.log('currentCity ' + currentCity);
-    console.log('currentShop ' + currentShop);
+    var filterObj = { Year: 2015, Week: week };
+    if ( currentCountry ) filterObj.Orglevel1 = currentCountry;
+    if ( currentCity )    filterObj.Orglevel2 = currentCity;
+    if ( currentShop )    filterObj.Orglevel3 = currentShop;
+
+    console.log( "Week selected: ", week );
+
+
+    Dashboard.applyFilter( filterObj );
+    Dashboard.update(500);
+
+    // console.log( data );
+    // console.log('currentCountry ' + currentCountry);
+    // console.log('currentCity ' + currentCity);
+    // console.log('currentShop ' + currentShop);
   }
 
   render() {
@@ -65,13 +74,17 @@ class Weeks extends Component {
 
 function select(state) {
   function getWeeks(data) {
-    let weeks = [];
+    // let weeks = [];
 
-    data.items.map((shop) => {
-      weeks.push(shop.Week);
-    });
+    // data.items.map((shop) => {
+    //   weeks.push(shop.Week);
+    // });
 
-    return _.uniq(weeks);
+    // return _.uniq(weeks);
+    var arr = Array.apply(null, Array(53));
+    return arr.map(function (x, i) { return i+1 });
+
+    return arr;
   }
 
   return {

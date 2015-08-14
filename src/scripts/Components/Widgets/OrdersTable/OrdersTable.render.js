@@ -71,34 +71,25 @@ export default class ordersWidget {
         function createBody() {
           thead = table.append('thead').append('tr');
           thead.selectAll('td')
-            .data(d3.keys(data[0]))
-            .enter()
-            .append('td')
-            .style("width", function(d) {
-              return tdwidth(d);
-            })
-            .text(function(d) {
-              return d;
-            });
+              .data( d3.keys(data[0]) )
+              .enter()
+              .append('td')
+              .style( "text-align", function(d,i) {  return i === 0 ? null : 'right'; } )
+              .style( "width", function(d) {  return tdwidth( d ); } )
+              .text( function(d) { return d; } );
 
           rows = table.selectAll(".dataRows")
-            .data(data)
-            .enter()
-            .append("tr");
-
+              .data( data )
+              .enter()
+              .append("tr");
+              
           cells = rows.selectAll("td")
-            .data(function(d) {
-              return d3.entries(d);
-            })
-            .enter()
-            .append("td")
-            .attr("class", function(d, i) {
-              return i === 0 ? null : 'value'
-            })
-            .style("color", checkHighlight)
-            .text(function(d) {
-              return d.value;
-            });
+              .data( function(d) { return d3.entries(d); } )
+              .enter()
+              .append("td")
+              .attr( "class", function(d,i) { return i === 0 ? null : 'value' })
+              .style( "color", checkHighlight )
+              .text(function(d){ return d.value; } );
         }
 
         function updateBody( transitionDuration ) {

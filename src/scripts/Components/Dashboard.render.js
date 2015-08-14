@@ -1,5 +1,6 @@
 import 'd3';
 import _ from 'underscore';
+import Papa from 'papaparse';
 import Helpers from '../Utils/helpers.js';
 import performanceWidget from './Widgets/Performance/Performance.render.js';
 import ordersWidget from './Widgets/OrdersTable/OrdersTable.render.js';
@@ -17,11 +18,26 @@ Dashboard = {
     });
   },
   createWidget: function(file, widgetFunction, filterObj) {
-    var ssvParser = d3.dsv(";", "text/plain");
-    ssvParser(file, widgetFunction);
-    // ssvParser(file, function(data) { console.log(data) });
+    // D3.js parser - slow
+    // var ssvParser = d3.dsv(";", "text/plain");
+    // ssvParser(file, widgetFunction);
+    console.log( "Starting parsing")
+    Papa.parse(file, {
+      header: true,
+      download: true,
+      skipEmptyLines: true,
+      // dynamicTyping: true,
+      complete: function(results) {
+        console.log( "Complete parsing")
+        widgetFunction( results.data, filterObj );
+      },
+      error: function(err) {
+        console.log( err );
+      }
+    });
+
   },
-  ordersWidget: function(data) {
+  ordersWidget: function(data, filterObj) {
     var tableData = prepareData( data );
 
     var rowsToHighlight = [
@@ -61,10 +77,18 @@ Dashboard = {
     function prepareData( data, filterObj ) {
       var filterObj = filterObj ? filterObj : {};
       var dataFiltered = Helpers.filterData( data, filterObj );
+      dataFiltered.forEach( function(d){
+        d.Year            = +d.Year;
+        d.Week            = +d.Week;
+        d.Ordersnum       = +d.Ordersnum;
+        d.Orderstargetnum = +d.Orderstargetnum;
+      });
+
       calcAdditionalOrdersData( dataFiltered, data ); // For previous Year
       
       var dataGrouped  =  _.groupBy( dataFiltered, 'Product' );
-      
+      // console.log( 'dataGrouped: ', dataGrouped );
+
       var dataReduced = [];
       for ( var key in  dataGrouped ) {
         dataReduced.push({
@@ -75,14 +99,16 @@ Dashboard = {
         });
       }
 
+
+      // console.log( 'Data reduces: ', dataReduced );
       var bodyData = _.map( dataReduced, function(d) { 
         return  {
           // 'Location': d.Orglevel1 + ' ' + d.Orglevel2 + ' ' + d.Orglevel3,
           'Product'    :  d.Product,
-          'Orders'     : +d.Ordersnum,
-          '% of'       :  Helpers.isNumber( +d.Ordersnum / d.Orderstargetnum ) ? Helpers.formatValue(+d.Ordersnum / d.Orderstargetnum * 100) + '%' : '',
-          'Target'     : +d.Orderstargetnum,
-          '% of (prev y.)'  :  Helpers.isNumber( +d.Ordersnum / d.Orderstargetnumprev ) ? Helpers.formatValue(+d.Ordersnum / d.Orderstargetnumprev * 100) + '%' : '',
+          'Orders'     :  d.Ordersnum,
+          '% of'       :  Helpers.isNumber( d.Ordersnum / d.Orderstargetnum ) ? Helpers.formatValue(+d.Ordersnum / d.Orderstargetnum * 100) + '%' : '',
+          'Target'     :  d.Orderstargetnum,
+          '% of (prev y.)'  :  Helpers.isNumber( d.Ordersnum / d.Orderstargetnumprev ) ? Helpers.formatValue(+d.Ordersnum / d.Orderstargetnumprev * 100) + '%' : '',
           'Target (prev y.)':  Helpers.isNumber( d.Orderstargetnumprev ) && (d.Orderstargetnumprev !== 0) ? +d.Orderstargetnumprev : ''
         }
       });
@@ -92,17 +118,17 @@ Dashboard = {
         'Orders': null,
         '% of': null,
         'Target': null,
-        '% of (PY)': null,
-        'Target (PY)': null
+        '% of (prev y.)': null,
+        'Target (prev y.)': null
       };
       var ordersTotal   = d3.sum( dataReduced, function(d) { return d.Ordersnum; } ),
         targetTotal   = d3.sum( dataReduced, function(d) { return d.Orderstargetnum; } ),
         targetTotalPY = d3.sum( dataReduced, function(d) { return d.Orderstargetnumprev; } );
       footerData['Orders']      = ordersTotal === 0 ? '' : ordersTotal;
       footerData['Target']      = targetTotal === 0 ? '' : targetTotal;
-      footerData['Target (PY)'] = targetTotalPY === 0 ? '' : targetTotalPY;
+      footerData['Target (prev y.)'] = targetTotalPY === 0 ? '' : targetTotalPY;
       footerData['% of']        = Helpers.isNumber( ordersTotal / targetTotal ) ? Helpers.formatValue( ordersTotal / targetTotal * 100 ) + '%' : '';
-      footerData['% of (PY)']   = Helpers.isNumber( ordersTotal / targetTotalPY ) ? Helpers.formatValue( ordersTotal / targetTotalPY * 100 ) + '%' : '';
+      footerData['% of (prev y.)']   = Helpers.isNumber( ordersTotal / targetTotalPY ) ? Helpers.formatValue( ordersTotal / targetTotalPY * 100 ) + '%' : '';
 
       return [ bodyData, footerData ];
 
@@ -131,7 +157,7 @@ Dashboard = {
       });
     }
   },
-  additionalServicesWidget: function(data) {
+  additionalServicesWidget: function(data, filterObj) {
     var tableData = prepareData(data);
 
     var selection = d3.select('#AdditionalServices');
@@ -239,9 +265,9 @@ Dashboard = {
   },
 }
 
-Dashboard.createWidget("CSV/Orders.csv", Dashboard.ordersWidget);
-Dashboard.createWidget("CSV/AdditionalServices.csv", Dashboard.additionalServicesWidget);
-Dashboard.createWidget("CSV/CustomerScore.csv", performanceWidget.render );
+Dashboard.createWidget("CSV/Orders.csv", Dashboard.ordersWidget, {Year: 2015, Week: 18} );
+Dashboard.createWidget("CSV/AdditionalServices.csv", Dashboard.additionalServicesWidget, {Year: 2015, Week: 18});
+Dashboard.createWidget("CSV/CustomerScore.csv", performanceWidget.render, {Year: 2015, Week: 18} );
 
 d3.select(window).on('resize', function() {
   Dashboard.widgets.forEach(function(w) {
