@@ -5,7 +5,7 @@ import Helpers from '../Utils/helpers.js';
 import performanceWidget from './Widgets/Performance/Performance.render.js';
 import ordersWidget from './Widgets/OrdersTable/OrdersTable.render.js';
 
-Dashboard = {
+let Dashboard = {
   widgets: [],
   applyFilter: function(filterObj) {
     this.widgets.forEach(function(w) {
