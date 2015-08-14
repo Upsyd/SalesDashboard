@@ -1,9 +1,16 @@
 :local(.styles) {
   font-weight: bold;
+  
+  padding-bottom: 10px;
+  border-bottom: 1px solid #CCC;
 
+  margin: 0 0;
+  
   h4 {
     margin-top: 0;
     font-size: 14px;
+
+    text-align: center;
   }
 
   .decrease {

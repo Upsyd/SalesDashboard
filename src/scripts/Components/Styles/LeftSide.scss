@@ -8,11 +8,11 @@
   
   margin-top: 35px;
 
-  // @media (#{$desktop}) {
-  //   height: 519px;
-  // }
+  @media (#{$desktop}) {
+    height: 444px;
+  }
 
-  // @media (#{$large-desktop}) {
-  //   height: 419px;
-  // }
+  @media (#{$large-desktop}) {
+    height: 344px;
+  }
 }
