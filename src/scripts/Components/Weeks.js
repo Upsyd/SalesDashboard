@@ -57,7 +57,7 @@ class Weeks extends Component {
     const { week } = this.props;
     return (
       <div className={ `${ styles } row` }>
-        <div className='col-md-12 col-lg-12'>
+        <div>
           <h4>Weeks</h4>
         </div>
         <div className='decrease'

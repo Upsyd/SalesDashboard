@@ -4,10 +4,10 @@
   position: relative;
   
   @media (#{$desktop}) {
-    height: 485px;
+    height: 445px;
   }
 
   @media (#{$large-desktop}) {
-    height: 385px;
+    height: 345px;
   }
 }
