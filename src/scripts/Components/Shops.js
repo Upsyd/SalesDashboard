@@ -26,10 +26,9 @@ class Shops extends Component {
 class CountriesList extends Component {
   
   selectCountry(country) {
-    const { dispatch } = this.props;
+    const { dispatch, week } = this.props;
     dispatch(setApplicationSettings(null, null, country));
 
-    var week = this.props.data.week;
     Dashboard.applyFilter({ Orglevel1: country, Year: 2015, Week: week });
     Dashboard.update(500);
   }
@@ -67,10 +66,9 @@ class CitiesList extends Component {
   }
 
   selectCity(city) {
-    const { dispatch } = this.props;
+    const { dispatch, week } = this.props;
     dispatch(setApplicationSettings(null, city));
 
-    var week = this.props.data.week;
     Dashboard.applyFilter({ Orglevel2: city, Year: 2015, Week: week });
     Dashboard.update(500);
   }
@@ -108,10 +106,9 @@ class ShopsList extends Component {
   }
 
   selectShop(shop, event) {
-    const { dispatch } = this.props;
+    const { dispatch, week } = this.props;
     dispatch(setApplicationSettings(shop));
 
-    var week = this.props.data.week;
     Dashboard.applyFilter({ Orglevel3: shop, Year: 2015, Week: week });
     Dashboard.update(500);
   }
@@ -142,6 +139,7 @@ class ShopsList extends Component {
 function select(state) {
   return {
     data: state.shops,
+    week: state.weeks.week,
     currentShop: state.application.currentShop,
     currentCity: state.application.currentCity,
     currentCountry: state.application.currentCountry,

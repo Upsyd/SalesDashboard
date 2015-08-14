@@ -21,14 +21,12 @@ Dashboard = {
     // D3.js parser - slow
     // var ssvParser = d3.dsv(";", "text/plain");
     // ssvParser(file, widgetFunction);
-    console.log( "Starting parsing")
     Papa.parse(file, {
       header: true,
       download: true,
       skipEmptyLines: true,
       dynamicTyping: true,
       complete: function(results) {
-        console.log( "Complete parsing")
         widgetFunction( results.data, filterObj );
       },
       error: function(err) {
@@ -38,7 +36,7 @@ Dashboard = {
 
   },
   ordersWidget: function(data, filterObj) {
-    var tableData = prepareData( data );
+    var tableData = prepareData( data, filterObj );
 
     var rowsToHighlight = [
       { name: '% of',        color: 'red', criterion: highlightCriterion },
@@ -77,14 +75,22 @@ Dashboard = {
     function prepareData( data, filterObj ) {
       var filterObj = filterObj ? filterObj : {};
       var dataFiltered = Helpers.filterData( data, filterObj );
-      dataFiltered.forEach( function(d){
-        d.Year            = +d.Year;
-        d.Week            = +d.Week;
-        d.Ordersnum       = +d.Ordersnum;
-        d.Orderstargetnum = +d.Orderstargetnum;
-      });
 
-      calcAdditionalOrdersData( dataFiltered, data ); // For previous Year
+      console.log( filterObj.Year );
+      var newFilterObj = {};
+      Object.assign( newFilterObj, filterObj );
+      newFilterObj.Year--;
+      var dataFilteredPY = Helpers.filterData( data, newFilterObj );
+      console.log( dataFilteredPY, newFilterObj );
+
+      // dataFiltered.forEach( function(d){
+      //   d.Year            = +d.Year;
+      //   d.Week            = +d.Week;
+      //   d.Ordersnum       = +d.Ordersnum;
+      //   d.Orderstargetnum = +d.Orderstargetnum;
+      // });
+
+      calcAdditionalOrdersData( dataFiltered, dataFilteredPY ); // For previous Year
       
       var dataGrouped  =  _.groupBy( dataFiltered, 'Product' );
       // console.log( 'dataGrouped: ', dataGrouped );
@@ -274,10 +280,9 @@ Dashboard = {
     }
   },
 }
-
-Dashboard.createWidget("CSV/OrdersPrevYear.csv", Dashboard.ordersWidget, {Year: 2015, Week: 18} );
-Dashboard.createWidget("CSV/AdditionalServices.csv", Dashboard.additionalServicesWidget, {Year: 2015, Week: 18});
-Dashboard.createWidget("CSV/CustomerScore.csv", performanceWidget.render, {Year: 2015, Week: 18} );
+Dashboard.createWidget("CSV/OrdersPrevYear.csv", Dashboard.ordersWidget, {Year: 2015, Week: 17} );
+Dashboard.createWidget("CSV/AdditionalServices.csv", Dashboard.additionalServicesWidget, {Year: 2015, Week: 17});
+Dashboard.createWidget("CSV/CustomerScore.csv", performanceWidget.render, {Year: 2015, Week: 17} );
 
 d3.select(window).on('resize', function() {
   Dashboard.widgets.forEach(function(w) {

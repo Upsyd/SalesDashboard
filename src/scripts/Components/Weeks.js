@@ -35,7 +35,7 @@ class Weeks extends Component {
     let currentCountry = data.currentCountry,
         currentCity = data.currentCity,
         currentShop = data.currentShop;
-    console.log( this.props );
+
     var filterObj = { Year: 2015, Week: week };
     if ( currentCountry ) filterObj.Orglevel1 = currentCountry;
     if ( currentCity )    filterObj.Orglevel2 = currentCity;
