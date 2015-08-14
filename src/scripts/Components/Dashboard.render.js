@@ -48,9 +48,9 @@ Dashboard = {
     ];
 
     var cellWidths = { 
-      'Product'     : '20%',
+      'Product'     : '24%',
       'Orders'      : '16%',
-      '% of'        : '16%',
+      '% of'        : '12%',
       'Target'      : '16%',
       '% of (prev y.)'   : '16%',
       'Target (prev y.)' : '16%' 
@@ -159,9 +159,19 @@ Dashboard = {
   },
   additionalServicesWidget: function(data, filterObj) {
     var tableData = prepareData(data);
+    
+    var cellWidths = { 
+      'Product': '28%',
+      'A %': '12%',
+      'B %': '12%',
+      'C %': '12%',
+      'D %': '12%',
+      'E %': '12%',
+      'F %': '12%'
+    };
 
     var selection = d3.select('#AdditionalServices');
-    var table = ordersWidget.tableChart().title('Additional Services').footer(tableData[1])(selection.datum(tableData[0]));
+    var table = ordersWidget.tableChart().title('Additional Services').tdWidths( cellWidths ).footer(tableData[1])(selection.datum(tableData[0]));
 
     Dashboard.widgets.push({
       type: "DataTable",
