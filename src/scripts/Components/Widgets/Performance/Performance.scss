@@ -3,8 +3,12 @@
 :local(.styles) {
   position: relative;
   
+  @media (#{$phone}) {
+    height: 360px;
+  }
+
   @media (#{$desktop}) {
-    height: 445px;
+    height: 360px;
   }
 
   @media (#{$large-desktop}) {
