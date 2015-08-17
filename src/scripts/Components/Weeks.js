@@ -8,47 +8,40 @@ import { weekIncrease, weekDecrease } from '../Actions/Actions.js';
 import 'style!./Styles/Weeks.scss';
 let styles = require('./Styles/Weeks.scss').locals.styles;
 
+// Renders
+import Dashboard from './Dashboard.render.js';
+
 class Weeks extends Component {
 
   increase() {
-    const { week, weeks, dispatch } = this.props;
+    const { week, year, weeks, dispatch } = this.props;
     let max = weeks[weeks.length - 1];
     
-    // if (week < max) {
-      dispatch(weekIncrease());
-    // }
-    this.update( week+1 > 53 ? 1 : week+1);
+    dispatch(weekIncrease());
+    this.update( week+1 > 53 ? 1 : week+1, week+1 > 53 ? year+1 : year );
   }
 
   decrease() {
-    const { week, weeks, dispatch } = this.props;
+    const { week, year, weeks, dispatch } = this.props;
     let min = weeks[0];
 
-    // if (week > min) {
-      dispatch(weekDecrease());
-    // }
-    this.update( week-1 < 1 ? 53 : week-1 );
+    dispatch(weekDecrease());
+    this.update( week-1 < 1 ? 53 : week-1, week-1 < 1 ? year-1 : year );
   }
 
-  update( week ) {
+  update( week,year ) {
     const { data } = this.props;
     let currentCountry = data.currentCountry,
         currentCity = data.currentCity,
         currentShop = data.currentShop;
 
-    var filterObj = { Year: 2015, Week: week };
+    var filterObj = { Year: year, Week: week };
     if ( currentCountry ) filterObj.Orglevel1 = currentCountry;
     if ( currentCity )    filterObj.Orglevel2 = currentCity;
     if ( currentShop )    filterObj.Orglevel3 = currentShop;
 
-
     Dashboard.applyFilter( filterObj );
-    Dashboard.update(500);
-
-    // console.log( data );
-    // console.log('currentCountry ' + currentCountry);
-    // console.log('currentCity ' + currentCity);
-    // console.log('currentShop ' + currentShop);
+    Dashboard.update(800);
   }
 
   render() {
@@ -88,6 +81,7 @@ function select(state) {
   return {
     weeks: getWeeks(state.weeks),
     week: state.weeks.week,
+    year: state.weeks.year,
     data: state.application,
   };
 }

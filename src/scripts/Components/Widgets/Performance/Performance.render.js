@@ -180,14 +180,14 @@ export default class performanceWidget {
           .attr({
             x: width + 2,
             y(d) {
-              return y(d[d.length - 1].value);
+              return d.length > 0 ? y(d[d.length - 1].value) : null;
             },
             fill(d) {
-              return color(d[0].key);
+              return d.length > 0 ? color(d[0].key) : '#fff';
             }
           })
           .text(function(d) {
-            return Helpers.formatValue(d[d.length - 1].value) + '%';
+            return d.length > 0 ? Helpers.formatValue(d[d.length - 1].value) + '%' : null;
           })
           .style('opacity', 0);
 
@@ -207,7 +207,7 @@ export default class performanceWidget {
             'fill': 'none',
             'stroke-width': '2px',
             'stroke' (d) {
-              return color(d[0].key);
+              return d.length > 0 ? color(d[0].key) : '#fff';
             }
           });
 
@@ -361,9 +361,11 @@ export default class performanceWidget {
                   .duration( transitionDuration )
                   .style( 'opacity', 0 );
               } else {
-                d3.select( this ).transition()
+                d3.select( this )
+                  .transition()
                   .duration( transitionDuration )
                   .attr( 'd', function(d) { return d.length === 0 ? null : line( d ); } )
+                  .style( 'stroke', function(d) { return d.length > 0 ? color(d[0].key) : null; } )
                   .style( 'opacity', 1 );
               }
             });
@@ -384,7 +386,8 @@ export default class performanceWidget {
                   .duration( transitionDuration )
                   .attr({
                     x:      width+2,
-                    y:      function(d) { return y( d[ d.length-1 ].value ); }
+                    y:      function(d) { return y( d[ d.length-1 ].value ); },
+                    fill(d) { return d.length > 0 ? color(d[0].key) : '#fff'; }
                   })
                   .text( function(d) { return Helpers.formatValue( d[ d.length-1 ].value ) + '%'; } )
                   .style( 'opacity', 1 );
@@ -398,7 +401,10 @@ export default class performanceWidget {
             
             lines.each( function(d){
               if ( d.length === 0 ) { d3.select( this ).style( 'opacity', 0 );} 
-              else { d3.select( this ).attr( 'd', function(d) { return d.length === 0 ? null : line( d ); } ).style( 'opacity', 1 );}
+              else { d3.select( this )
+                .attr( 'd', function(d) { return d.length === 0 ? null : line( d ); } )
+                .style( 'stroke', function(d) { return d.length > 0 ? color(d[0].key) : null; } )
+                .style( 'opacity', 1 );}
             });
 
             linesTransparent.attr( 'd', function(d) { return line( d ); } );
@@ -410,7 +416,8 @@ export default class performanceWidget {
                 d3.select( this )
                   .attr({
                     x:      width+2,
-                    y:      function(d) { return y( d[ d.length-1 ].value ); }
+                    y:      function(d) { return y( d[ d.length-1 ].value ); },
+                    fill(d) { return d.length > 0 ? color(d[0].key) : '#fff'; }
                   })
                   .text( function(d) { return Helpers.formatValue( d[ d.length-1 ].value ) + '%'; } )
                   .style( 'opacity', 1 );

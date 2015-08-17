@@ -23,12 +23,12 @@ import AdditionalServices from './Widgets/AdditionalServices/AdditionalServices.
 
 export default class RightSide extends Component {
   render() {
-    const { week } = this.props;
+    const { week, year } = this.props;
     return (
       <div className={ `${ styles }` }>
         <div className='row'>
           <h3 className='header'>
-            { week } Week, 2015 Year
+            { week } Week, { year } Year
           </h3>
           <div className='col-md-6 col-lg-6'>
             <OrdersTable className={ stylesWidget } />
@@ -57,6 +57,7 @@ function select(state) {
   return {
     // weeks: getWeeks(state.weeks),
     week: state.weeks.week,
+    year: state.weeks.year
   };
 }
 

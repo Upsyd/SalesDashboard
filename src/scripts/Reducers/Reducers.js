@@ -53,10 +53,12 @@ export function weeks(state = weeksData, action) {
   switch (action.type) {
 
     case 'WEEKINCREASE':
+      if ( newState.week >= 53 ) newState.year++;
       newState.week = newState.week < 53 ? newState.week+1 : 1;
       return newState;
 
     case 'WEEKDECREASE':
+      if ( newState.week <= 1 ) newState.year--;
       newState.week = newState.week >1 ? newState.week-1 : 53;
       return newState;
 

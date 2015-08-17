@@ -99,10 +99,11 @@ let Dashboard = {
       var dataReduced = [];
       for ( var key in  dataGrouped ) {
         dataReduced.push({
-          'Product'          : key,
-          'Ordersnum'        : d3.sum( dataGrouped[key], function(d) { return Helpers.isNumber(d.Ordersnum) ? d.Ordersnum : 0; } ),
-          'Orderstargetnum'  : d3.sum( dataGrouped[key], function(d) { return Helpers.isNumber(d.Orderstargetnum) ? d.Orderstargetnum : 0; } ),
+          'Product'              : key,
+          'Ordersnum'            : d3.sum( dataGrouped[key], function(d) { return Helpers.isNumber(d.Ordersnum) ? d.Ordersnum : 0; } ),
+          'Orderstargetnum'      : d3.sum( dataGrouped[key], function(d) { return Helpers.isNumber(d.Orderstargetnum) ? d.Orderstargetnum : 0; } ),
           'Orderstargetnumprev'  : d3.sum( dataGrouped[key], function(d) { return Helpers.isNumber(d.Orderstargetnumprev) ? d.Orderstargetnumprev : 0; } ),
+          'Ordersnumprev'        : d3.sum( dataGrouped[key], function(d) { return Helpers.isNumber(d.Ordersnumprev) ? d.Ordersnumprev : 0; } )
         });
       }
 
@@ -115,7 +116,7 @@ let Dashboard = {
           'Orders'     :  d.Ordersnum,
           '% of'       :  Helpers.isNumber( d.Ordersnum / d.Orderstargetnum ) ? Helpers.formatValue(+d.Ordersnum / d.Orderstargetnum * 100) + '%' : '',
           'Target'     :  d.Orderstargetnum,
-          '% of (prev y.)'  :  Helpers.isNumber( d.Ordersnum / d.Orderstargetnumprev ) ? Helpers.formatValue(+d.Ordersnum / d.Orderstargetnumprev * 100) + '%' : '',
+          '% of (prev y.)'  :  Helpers.isNumber( d.Ordersnum / d.Ordersnumprev ) ? Helpers.formatValue(+d.Ordersnum / d.Ordersnumprev * 100) + '%' : '',
           'Target (prev y.)':  Helpers.isNumber( d.Orderstargetnumprev ) && (d.Orderstargetnumprev !== 0) ? +d.Orderstargetnumprev : ''
         }
       });
@@ -129,13 +130,14 @@ let Dashboard = {
         'Target (prev y.)': null
       };
       var ordersTotal   = d3.sum( dataReduced, function(d) { return d.Ordersnum; } ),
-        targetTotal   = d3.sum( dataReduced, function(d) { return d.Orderstargetnum; } ),
-        targetTotalPY = d3.sum( dataReduced, function(d) { return d.Orderstargetnumprev; } );
+        ordersTotalPY   = d3.sum( dataReduced, function(d) { return d.Ordersnumprev; } ),
+        targetTotal     = d3.sum( dataReduced, function(d) { return d.Orderstargetnum; } ),
+        targetTotalPY   = d3.sum( dataReduced, function(d) { return d.Orderstargetnumprev; } );
       footerData['Orders']      = ordersTotal === 0 ? '' : ordersTotal;
       footerData['Target']      = targetTotal === 0 ? '' : targetTotal;
       footerData['Target (prev y.)'] = targetTotalPY === 0 ? '' : targetTotalPY;
       footerData['% of']        = Helpers.isNumber( ordersTotal / targetTotal ) ? Helpers.formatValue( ordersTotal / targetTotal * 100 ) + '%' : '';
-      footerData['% of (prev y.)']   = Helpers.isNumber( ordersTotal / targetTotalPY ) ? Helpers.formatValue( ordersTotal / targetTotalPY * 100 ) + '%' : '';
+      footerData['% of (prev y.)']   = Helpers.isNumber( ordersTotal / ordersTotalPY ) ? Helpers.formatValue( ordersTotal / ordersTotalPY * 100 ) + '%' : '';
 
       return [ bodyData, footerData ];
 
@@ -158,8 +160,10 @@ let Dashboard = {
 
         if (prevYearElement) {
           d.Orderstargetnumprev = prevYearElement.Orderstargetnum;
+          d.Ordersnumprev       = prevYearElement.Ordersnum;
         } else {
           d.Orderstargetnumprev = null;
+          d.Ordersnumprev       = null;
         }
       });
     }
@@ -231,12 +235,12 @@ let Dashboard = {
         return {
           // 'Location': d.Orglevel1 + ' ' + d.Orglevel2 + ' ' + d.Orglevel3,
           'Product': d.Product,
-          'A %': Helpers.isNumber(+d.OrdersNumA / d.ServicesNumA) ?Helpers.formatValue(+d.OrdersNumA / d.ServicesNumA * 100) + '%' : '',
-          'B %': Helpers.isNumber(+d.OrdersNumA / d.ServicesNumB) ?Helpers.formatValue(+d.OrdersNumA / d.ServicesNumB * 100) + '%' : '',
-          'C %': Helpers.isNumber(+d.OrdersNumA / d.ServicesNumC) ?Helpers.formatValue(+d.OrdersNumA / d.ServicesNumC * 100) + '%' : '',
-          'D %': Helpers.isNumber(+d.OrdersNumA / d.ServicesNumD) ?Helpers.formatValue(+d.OrdersNumA / d.ServicesNumD * 100) + '%' : '',
-          'E %': Helpers.isNumber(+d.OrdersNumA / d.ServicesNumE) ?Helpers.formatValue(+d.OrdersNumA / d.ServicesNumE * 100) + '%' : '',
-          'F %': Helpers.isNumber(+d.OrdersNumA / d.ServicesNumF) ?Helpers.formatValue(+d.OrdersNumA / d.ServicesNumF * 100) + '%' : ''
+          'A %': Helpers.isNumber( d.ServicesNumA / d.OrdersNumA ) ? Helpers.formatValue( d.ServicesNumA / d.OrdersNumA * 100) + '%' : '',
+          'B %': Helpers.isNumber( d.ServicesNumB / d.OrdersNumA ) ? Helpers.formatValue( d.ServicesNumB / d.OrdersNumA * 100) + '%' : '',
+          'C %': Helpers.isNumber( d.ServicesNumC / d.OrdersNumA ) ? Helpers.formatValue( d.ServicesNumC / d.OrdersNumA * 100) + '%' : '',
+          'D %': Helpers.isNumber( d.ServicesNumD / d.OrdersNumA ) ? Helpers.formatValue( d.ServicesNumD / d.OrdersNumA * 100) + '%' : '',
+          'E %': Helpers.isNumber( d.ServicesNumE / d.OrdersNumA ) ? Helpers.formatValue( d.ServicesNumE / d.OrdersNumA * 100) + '%' : '',
+          'F %': Helpers.isNumber( d.ServicesNumF / d.OrdersNumA ) ? Helpers.formatValue( d.ServicesNumF / d.OrdersNumA * 100) + '%' : ''
         }
       });
 
@@ -255,27 +259,27 @@ let Dashboard = {
       var sumServicesNumA = d3.sum(dataReduced, function(d) {
         return +d.ServicesNumA;
       });
-      footerData['A %'] = Helpers.isNumber(sumOrdersNumA / sumServicesNumA) ?Helpers.formatValue(sumOrdersNumA / sumServicesNumA * 100) + '%' : '';
+      footerData['A %'] = Helpers.isNumber( sumServicesNumA / sumOrdersNumA ) ? Helpers.formatValue( sumServicesNumA / sumOrdersNumA * 100) + '%' : '';
       var sumServicesNumB = d3.sum(dataReduced, function(d) {
         return +d.ServicesNumB;
       });
-      footerData['B %'] = Helpers.isNumber(sumOrdersNumA / sumServicesNumB) ?Helpers.formatValue(sumOrdersNumA / sumServicesNumB * 100) + '%' : '';
+      footerData['B %'] = Helpers.isNumber( sumServicesNumB / sumOrdersNumA ) ? Helpers.formatValue( sumServicesNumB / sumOrdersNumA * 100) + '%' : '';
       var sumServicesNumC = d3.sum(dataReduced, function(d) {
         return +d.ServicesNumC;
       });
-      footerData['C %'] = Helpers.isNumber(sumOrdersNumA / sumServicesNumC) ?Helpers.formatValue(sumOrdersNumA / sumServicesNumC * 100) + '%' : '';
+      footerData['C %'] = Helpers.isNumber( sumServicesNumC / sumOrdersNumA ) ? Helpers.formatValue( sumServicesNumC / sumOrdersNumA * 100) + '%' : '';
       var sumServicesNumD = d3.sum(dataReduced, function(d) {
         return +d.ServicesNumD;
       });
-      footerData['D %'] = Helpers.isNumber(sumOrdersNumA / sumServicesNumD) ?Helpers.formatValue(sumOrdersNumA / sumServicesNumD * 100) + '%' : '';
+      footerData['D %'] = Helpers.isNumber( sumServicesNumD / sumOrdersNumA ) ? Helpers.formatValue( sumServicesNumD / sumOrdersNumA * 100) + '%' : '';
       var sumServicesNumE = d3.sum(dataReduced, function(d) {
         return +d.ServicesNumE;
       });
-      footerData['E %'] = Helpers.isNumber(sumOrdersNumA / sumServicesNumE) ?Helpers.formatValue(sumOrdersNumA / sumServicesNumE * 100) + '%' : '';
+      footerData['E %'] = Helpers.isNumber( sumServicesNumE / sumOrdersNumA ) ? Helpers.formatValue( sumServicesNumE / sumOrdersNumA * 100) + '%' : '';
       var sumServicesNumF = d3.sum(dataReduced, function(d) {
         return +d.ServicesNumF;
       });
-      footerData['F %'] = Helpers.isNumber(sumOrdersNumA / sumServicesNumF) ?Helpers.formatValue(sumOrdersNumA / sumServicesNumF * 100) + '%' : '';
+      footerData['F %'] = Helpers.isNumber( sumServicesNumF / sumOrdersNumA ) ? Helpers.formatValue( sumServicesNumF / sumOrdersNumA * 100) + '%' : '';
 
       return [bodyData, footerData];
     }
@@ -317,17 +321,30 @@ let Dashboard = {
 
     function prepareData( data, filterObj ) {
       var filterObj = filterObj ? filterObj : {};
+
+      var newFilterObj = {};
+      Object.assign( newFilterObj, filterObj );
+
+      if ( !newFilterObj.hasOwnProperty( 'Orglevel2' ) && !newFilterObj.hasOwnProperty( 'Orglevel3' ) && newFilterObj.hasOwnProperty( 'Orglevel1' ) ) {
+        newFilterObj[ 'Orglevel2' ] = newFilterObj[ 'Orglevel1' ];
+        newFilterObj[ 'Orglevel3' ] = newFilterObj[ 'Orglevel1' ];
+      } 
+
+      if ( !newFilterObj.hasOwnProperty( 'Orglevel1' ) && !newFilterObj.hasOwnProperty( 'Orglevel3' ) && newFilterObj.hasOwnProperty( 'Orglevel2' ) ) {
+        newFilterObj[ 'Orglevel3' ] = newFilterObj[ 'Orglevel2' ];
+      } 
+
       var year, week;
-      if ( filterObj.hasOwnProperty('Year') ){
-        year = +filterObj.Year;
-        delete filterObj.Year;
+      if ( newFilterObj.hasOwnProperty('Year') ){
+        year = +newFilterObj.Year;
+        delete newFilterObj.Year;
       }
-      if ( filterObj.hasOwnProperty('Week') ){
-        week = +filterObj.Week;
-        delete filterObj.Week;
+      if ( newFilterObj.hasOwnProperty('Week') ){
+        week = +newFilterObj.Week;
+        delete newFilterObj.Week;
       }
 
-      var dataFiltered = Helpers.filterData( data, filterObj );
+      var dataFiltered = Helpers.filterData( data, newFilterObj );
 
       var formatYW = d3.time.format('%Y-%W-%w'); 
       var date = ( year && week )? formatYW.parse(year + '-' + (week+1) + '-0' ) : new Date();
@@ -365,9 +382,9 @@ let Dashboard = {
     }
   }
 }
-Dashboard.createWidget("CSV/OrdersPrevYear.csv", Dashboard.ordersWidget, {Year: 2015, Week: 17} );
-Dashboard.createWidget("CSV/AdditionalServices.csv", Dashboard.additionalServicesWidget, {Year: 2015, Week: 17});
-Dashboard.createWidget("CSV/CustomerScore.csv", Dashboard.performanceWidget, {Year: 2015, Week: 17} );
+Dashboard.createWidget("CSV/OrdersPrevYear.csv", Dashboard.ordersWidget, {Year: 2015, Week: 17, Orglevel1: 'SWEDEN' } );
+Dashboard.createWidget("CSV/AdditionalServices.csv", Dashboard.additionalServicesWidget, {Year: 2015, Week: 17, Orglevel1: 'SWEDEN' });
+Dashboard.createWidget("CSV/CustomerScore.csv", Dashboard.performanceWidget, {Year: 2015, Week: 17, Orglevel1: 'SWEDEN' } );
 
 d3.select(window).on('resize', function() {
   Dashboard.widgets.forEach(function(w) {
