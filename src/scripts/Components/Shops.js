@@ -34,9 +34,11 @@ class CountriesList extends Component {
   }
 
   render() {
-    const { currentCountry } = this.props;
-    let countries = ['SWEDEN'],
+    let { data, currentCountry } = this.props;
+    let countries = _(data.items).chain().flatten().pluck('Orglevel1').unique().value(),
         active;
+    if ( !currentCountry )
+      currentCountry = countries[0];
     return (
       <div className='countries'>
         { countries.map((country) => {

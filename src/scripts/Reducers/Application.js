@@ -1,5 +1,6 @@
 import $ from 'jquery';
-import Helpers from '../Utils/helpers.js';
+import Papa from 'papaparse';
+
 
 let itemsData = [];
 
@@ -7,7 +8,7 @@ $.ajax({
   url: 'CSV/Org.csv',
   async: false,
   success: function(csv) {
-    itemsData = JSON.parse(Helpers.CSV2JSON(csv, ';'));
+    itemsData = Papa.parse(csv, { header: true, skipEmptyLines: true }).data;
   },
   dataType: 'text',
 });
@@ -16,7 +17,7 @@ let shops = {
   week: 17,
 
   // Default
-  currentCountry: 'SWEDEN',
+  currentCountry: '',
   currentCity: '',
   currentShop: '',
 

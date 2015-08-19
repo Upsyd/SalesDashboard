@@ -382,9 +382,9 @@ let Dashboard = {
     }
   }
 }
-Dashboard.createWidget("CSV/OrdersPrevYear.csv", Dashboard.ordersWidget, {Year: 2015, Week: 17, Orglevel1: 'SWEDEN' } );
-Dashboard.createWidget("CSV/AdditionalServices.csv", Dashboard.additionalServicesWidget, {Year: 2015, Week: 17, Orglevel1: 'SWEDEN' });
-Dashboard.createWidget("CSV/CustomerScore.csv", Dashboard.performanceWidget, {Year: 2015, Week: 17, Orglevel1: 'SWEDEN' } );
+Dashboard.createWidget("CSV/OrdersPrevYear.csv", Dashboard.ordersWidget, {Year: 2015, Week: 17 } );
+Dashboard.createWidget("CSV/AdditionalServices.csv", Dashboard.additionalServicesWidget, {Year: 2015, Week: 17 });
+Dashboard.createWidget("CSV/CustomerScore.csv", Dashboard.performanceWidget, {Year: 2015, Week: 17 } );
 
 d3.select(window).on('resize', function() {
   Dashboard.widgets.forEach(function(w) {
